@@ -3,7 +3,7 @@ Django Game Store Project Plan
 
 ### 1. Team
 
-* 999999 Kenneth Forsman
+* 543693 Kenneth Forsman
 * 999998 Olli Mustakallio
 * 999997 Otso Teperi
 
@@ -20,12 +20,23 @@ Meetings on demand, other communication is handled by slack.
 We will use git repository and heroku.
 
 For the frontend we plan to use Django framework , HTML5 and SCSS.
-For the middleware we have planned to use Express framework with NodeJS
+For the middleware we have planned to use Express framework with NodeJS to create a restful API.
 Database will be Postgre SQL.
 
-#### 3.1. Webstore diagram
+#### 3.1. Features to implement
 
-** Comign soon **
+** Authentication
+** Basic player functionalities
+** Basic developer functionalities
+** Game/service interaction
+** Quality of Work
+** Non-functional requirements
+** Save/load and resolution feature
+** 3rd party login (OpenID, Google)
+** RESTful API (NodeJS)
+** Own game (optional)
+** Mobile Friendly (optional)
+** Social media sharing (optional)
 
 #### 3.2. Responsibilities & Tasks
 
@@ -39,6 +50,29 @@ We will prioritize mandatory components first. After all mandatory components ar
 Functionality , User experience , User interface
 
 Our project has to look good , feel good and work good.
+
+#### 3.4. Security
+
+We have planned to use OpenID as the authentication service, we will be using JWT for user sessions.
+A new key is generated per login and destroyed on logout. Each HTTP request will be validated.
+
+For the web frontend we will follow django security tips.
+https://docs.djangoproject.com/en/2.1/topics/security/
+
+HTTPS and SSL will not be included in this project, even tho we could use lets encrypt (but it is not mandatory part of this course).
+
+#### 3.5 Django Model
+
+| Users        		| Games         			| Score  		| Purchases			 |
+| ------------------|:-----------------------:	| -------------:|-------------------:|
+| Id (int32)      	| id (int32)	 			| id(Users:id)	| id (Games:id)		 |
+| fname (string)    | title (string)      		| score(int32)  | purchasedate (date)|
+| lname (string) 	| imageURL (string) 		| title(Game:title) | price (Games:price)|
+| password (string) | price (int32)    			| date(date)	| user (Users:id)	 |
+| class (int32) 	| developer (User:id)   	|    	 		| title:(Games:title)|
+|  					| url (string)     			|    	 		| |
+|				 	| genre (string)  			|    	 		| |
+
 
 
 ### 4. Process and Time Schedule
@@ -71,4 +105,5 @@ Before merging components into master branch, components are tested and approved
 -Work & Other commitments
 -Lazyness
 -Lack of experience
+-Fail to test properly
 
