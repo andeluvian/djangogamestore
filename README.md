@@ -4,7 +4,7 @@ Django Game Store Project Plan
 ### 1. Team
 
 * 543693 Kenneth Forsman
-* 999998 Olli Mustakallio
+* k84823 Olli Mustakallio
 * 999997 Otso Teperi
 
 
@@ -87,7 +87,8 @@ modules are taken to north pole using goverment post services.
 * Week 52: Money and Power
 * Week 53: Is there a week 53?
 
-
+#### 4.1 Project Milestones
+During the first phase, the mandatory specifications are completed. This phase ends with a test Heroku deployment. During the second phase, the extra functionality is added as per our agile planning. After each additional functionality 'sprint', a Heroku deployment should be made to assure a working project is available for review. This is repeated until the time is out.
 
 ### 5. Testing & Working in GIT
 
