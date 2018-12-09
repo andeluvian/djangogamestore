@@ -5,7 +5,7 @@ Django Game Store Project Plan
 
 * 543693 Kenneth Forsman
 * k84823 Olli Mustakallio
-* 999997 Otso Teperi
+* 369181 Otso Teperi
 
 
 ### 2. Goal
@@ -25,24 +25,52 @@ Database will be Postgre SQL.
 
 #### 3.1. Features to implement
 
-** Authentication
-** Basic player functionalities
-** Basic developer functionalities
-** Game/service interaction
-** Quality of Work
-** Non-functional requirements
-** Save/load and resolution feature
-** 3rd party login (OpenID, Google)
-** RESTful API (NodeJS)
-** Own game (optional)
-** Mobile Friendly (optional)
-** Social media sharing (optional)
+1. Authentication
+	* Authentication will be done with Django Authentication.
+	* Validation will use emails, using the Django email validation.
+	* For extra points we will try and create a Django Rest API using Django Rest Framework and JWT for added security.
+
+2. Basic player functionalities
+	* Players are able to purchase games, play games and play games.
+	* Players can browse games via the search games page and see which games are discounted.
+	* Players can see their purchase history and high score for each game.
+	* Players can only play games they have purchased or if games are marked as free.
+	
+3. Basic developer functionalities
+	* Developers can submit games to the site using a form to register their game.
+	* Developers can edit , delete the game they have added to the site.
+	* Developers cannot register the same game twice.
+	* Developers can monitor the sales of games have have listed.
+	
+4. Game/service interaction
+	* Games are played via iframes that communicate with the service via postMessages.
+	
+5. Quality of Work
+	* We will try to follow Django best practices to create a good site.
+	
+6. Non-functional requirements
+	* When plans have changed we will update the Kanban board with new tasksa nd update the project plan.
+	
+7. Save/load and resolution feature (extra)
+	* TBD
+8. 3rd party login (OpenID, Google) (extra)
+	* We plan to add the OpenID service to Django Auth or add it to Django Rest Framework
+9. RESTful API  (extra)
+	* A restful API using nodeJS or Django Rest Framework will be added to the site to tasks of communicating with the game services and browsing games.
+10. Own game  (extra)
+	* We will create a simple javascript game for the site to test it.
+11. Mobile Friendly (extra)
+	* We will be using bootstrap for the UI
+12. Social media sharing (extra)
+	* TBD if we will add social sharing.
 
 #### 3.2. Responsibilities & Tasks
 
-* Olli Mustakallio - Project manager 
-* Kenneth Forsman - Secretary of defence
-* Otso Teperi - Office sweetheart <3
+* Olli Mustakallio - Project manager  Full stack
+* Kenneth Forsman - Backend
+* Otso Teperi - Frontend
+
+Each member of the team will contribute to the project equally on all parts, however they have been assigned specialties that they will mostly focus on.
 
 #### 3.3. Priorities
 
