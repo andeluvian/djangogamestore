@@ -64,7 +64,7 @@ Database will be PostgreSQL.
     * We will be using Bootstrap for the UI.
 
 12. Social media sharing (extra)
-    * TBD if we will add social sharing.
+    * TBD if we will add social sharing. One possibility is to use the [django-allauth](https://django-allauth.readthedocs.io/en/stable/) package.
 
 ### 3.2. Responsibilities & Tasks
 
