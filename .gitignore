@@ -6,4 +6,10 @@ __pycache__/
 local_settings.py
 
 .env
+db.sqlite3.idea/
+database_erd.xml
+.idea/
+.gitignore
 db.sqlite3
+gamestore/.DS_Store
+static/.DS_Store
