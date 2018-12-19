@@ -90,6 +90,11 @@ HTTPS and SSL will not be included in this project due to it not being within th
 
 ### 3.5 Django Model
 
+#### Database version 0.2
+
+![ER-diagram of the gamestore database](database_erd.jpg)
+
+#### Database version 0.1
 | Users             | Games                 | Score             | Purchases             |
 |-------------------|-----------------------|-------------------|-----------------------|
 | Id (int32)        | id (int32)            | id(Users:id)      | id (Games:id)         |
