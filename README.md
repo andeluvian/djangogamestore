@@ -88,13 +88,14 @@ For the web front-end we will follow Django security tips.
 
 HTTPS and SSL will not be included in this project due to it not being within the scope of the assignment (or possible for free on Heroku). However, in a real world scenario a secured connection would be considered mandatory. In such case, we would at minimum utilize a free Let's Encrypt certificate to ensure reasonable protection of sensitive information.
 
-### 3.5 Django Model
+### 3.5. Django Model
 
 #### Database version 0.2
 
 ![ER-diagram of the gamestore database](database_erd.jpg)
 
 #### Database version 0.1
+
 | Users             | Games                 | Score             | Purchases             |
 |-------------------|-----------------------|-------------------|-----------------------|
 | Id (int32)        | id (int32)            | id(Users:id)      | id (Games:id)         |
@@ -105,24 +106,22 @@ HTTPS and SSL will not be included in this project due to it not being within th
 |                   | url (string)          |                   |                       |
 |                   | genre (string)        |                   |                       |
 
-## 4. Process and Time Schedule
+### 3.6. Layout
 
-We communicate using smoke signals at 1 p.m. The finished modules are taken to north pole using goverment post services.
+![Wireframe of the layout](wireframe.png)
+
+## 4. Process and Time Schedule
 
 * Week 49: Create project plan. Setup Git repository, Heroku, PostgreSQL, RESTful API.
 * Week 50: Split work into small pieces, start working on them as a team or individually. Grab tickets from the Trello board. Group registration. (14.12.)
-* Week 51: Prepare for Christmas and New year, hopefully a small prototype is ready at this phase. Registration, Login, Developer basic functionality working.
-* Week 52: Watch the Snowman. Play under the Christmas tree.
-* Week 1: First disappointment of 2019.
-* Week 2:
-* Week 3:
-* Week 4:
-* Week 5:
-* Week 6:
-* Week 7:
-* Week 8: Final submission. (19.2.)
+* Week 51: Prepare for Christmas and New Year. Hopefully a small prototype is ready at this phase. Project plan (21.12.)
+* Week 52: Holidays.
+* Week 1-3: Set up core features. Get a working prototype as soon as possible. Hopefully by the end, everything mandatory is ready and functional. Test on Heroku.
+* Week 4-6: Add extra features. Make it better.
+* Week 7: Check everything twice. Fix minor issues.
+* Week 8: Push to production. Final submission. (19.2.)
 
-### 4.1 Project Milestones
+### 4.1. Project Milestones
 
 During the first phase, the mandatory specifications are completed. This phase ends with a test Heroku deployment. During the second phase, the extra functionality is added as per our agile planning. After each additional functionality 'sprint', a Heroku deployment should be made to assure a working project is available for review. This is repeated until the time is out.
 
