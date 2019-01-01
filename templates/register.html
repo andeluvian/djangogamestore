@@ -5,21 +5,21 @@
 {% block main-content %}
 
     <h3>Registration page</h3>
-    <div class ="content">
+    <div class="content">
         <form method="POST">
-          {% csrf_token %}
-          <fieldset class="fgrp">
-            <legend >join today</legend>
-             {{ form.as_p }}
-          </fieldset>
-          <div class="fgrp">
-            <button type="submit" name="button"> Sign up</button>
-          </div>
+            {% csrf_token %}
+            <fieldset class="fgrp">
+                <legend>join today</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div class="fgrp">
+                <button type="submit" name="button"> Sign up</button>
+            </div>
         </form>
         <div class="something">
-          <small class="text-muted">
-            Do you have a account? <a class="margin-2" href ="#"></a>
-          </small>
+            <small class="text-muted">
+                Do you have a account? <a class="margin-2" href="#"></a>
+            </small>
         </div>
-
+    </div>
 {% endblock %}
