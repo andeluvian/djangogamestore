@@ -9,7 +9,7 @@ urlpatterns = [
 
     #path('login/', auth_views.login_view, name='login'), # login
     path('logout/', views.index, name='index'), # logout
-    path('register/', views.index, name='index'), # register player or developer
+    #path('register/', views.index, name='index'), # register player or developer
 
     path('player/', views.index, name='index'), # show bought games @player
     path('player/purchases/', views.index, name='index'), # show purchase history @player

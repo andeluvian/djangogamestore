@@ -7,3 +7,6 @@ def index(request):
 
 def login(request):
     return render(request, 'login.html', {'context': 'context'})
+
+def register(request):
+    return render(request, 'register.html', {'context': 'context'})
