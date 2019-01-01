@@ -1,25 +1,35 @@
 {% extends 'layout.html' %}
+{% load widget_tweaks %}
 
 {% block title %}Home{% endblock %}
 
 {% block main-content %}
+    <div class="row">
+        <div class="col-sm-8 col-md-6 col-lg-5">
+            <h3 class="my-3">Register</h3>
+            <form method="post">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
 
-    <h3>Registration page</h3>
-    <div class="content">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="fgrp">
-                <legend>join today</legend>
-                {{ form.as_p }}
-            </fieldset>
-            <div class="fgrp">
-                <button type="submit" name="button"> Sign up</button>
-            </div>
-        </form>
-        <div class="something">
-            <small class="text-muted">
-                Do you have a account? <a class="margin-2" href="#"></a>
-            </small>
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field|add_class:'form-control' }}
+                        {% for error in field.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="form-group">
+                    <button type="submit" name="button" class="btn btn-primary mt-2">Sign-up</button>
+                    <a href="{% url 'index' %}" class="btn btn-default">Cancel</a>
+                    <p class="mt-3"><a href="{% url 'login' %}" class="text-muted">Do you have an account?</a></p>
+                </div>
+
+            </form>
         </div>
     </div>
 {% endblock %}
