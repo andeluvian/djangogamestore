@@ -1,22 +1,13 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block main-content %}
-
-<div>
-<form method="POST">
-    {% csrf_token %}
-{{form.as_p}}
-  <input type="submit">
-</form>
-
-
-
-
-
-</div>
-
-
-
+    <div>
+        <form action="" method="POST">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="submit">
+        </form>
+    </div>
 {% endblock %}
