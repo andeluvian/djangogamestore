@@ -1,9 +1,15 @@
+from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decoqrators import login_required
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import (
     authenticate,
-    login
+    get_user_model,
+    login,
+    logout
 
 )
-from django.shortcuts import render
+
 
 ##This is old login form, test do not work
 """"
@@ -36,11 +42,9 @@ def login_view(request):
     #     return redirect('/')
     context = {
         'form': form
-
     }
-
-    return render(request, "login.html", context)
-
+    print('Hello')
+    return render(request, 'login.html', context)
 
 # def register_view(request):
 #     next = request.Get.get('next')
