@@ -142,3 +142,9 @@ Before merging components into master branch, components are tested and approved
 * Fail to test properly
 * Miscommunication
 * Hubris
+
+## 7. Technical Notes
+
+* URLs are placed in gamestore.urls
+* All templates are in the templates directory and inherit layout.html (which contains the bootstrap container).
+* Install django-widget-tweaks for the forms to render correctly with bootstrap classes (pip install django-widget-tweaks).
