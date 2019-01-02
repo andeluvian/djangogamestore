@@ -1,12 +1,15 @@
 from django.urls import path
 from . import views
+from authentication import views as auth_views
+
+# TODO: THESE URLS ARE NO CONNECTED TO ANYTHING - IMPORT TO gamestore.urls (?)
 
 urlpatterns = [
     path('', views.index, name='index'), # frontpage
 
-    path('login/', views.login, name='login'), # login
+    #path('login/', auth_views.login_view, name='login'), # login
     path('logout/', views.index, name='index'), # logout
-    path('register/', views.index, name='index'), # register player or developer
+    #path('register/', views.index, name='index'), # register player or developer
 
     path('player/', views.index, name='index'), # show bought games @player
     path('player/purchases/', views.index, name='index'), # show purchase history @player
