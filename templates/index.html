@@ -3,7 +3,17 @@
 {% block title %}Home{% endblock %}
 
 {% block main-content %}
+    <div class="row">
+        <div class="col">
+            <p>Index page main content area.</p>
+            {% if user.is_authenticated %}
+                <p>Logged in as {{ user.username }}</p>
+            {% else %}
+                <p>Browsing as anonymous (not logged in)</p>
+            {% endif %}
+            <p>Users registered: {{ user_count }}</p>  <!-- Only to verify the registration form works, delete later -->
+        </div>
+    </div>
 
-    <p>Index page main content area.</p>
 
 {% endblock %}
