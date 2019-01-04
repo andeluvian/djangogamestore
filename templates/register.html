@@ -25,11 +25,10 @@
                 {% endfor %}
                 <!-- /django tweaks code reference -->
                 <div class="form-group">
-                    <button type="submit" name="button" class="btn btn-primary mt-2">Sign-up</button>
-                    <a href="{% url 'index' %}" class="btn btn-default">Cancel</a>
-                    <p class="mt-3"><a href="{% url 'login' %}" class="text-muted">Do you have an account?</a></p>
+                    <button type="submit" name="button" class="btn btn-primary">Sign-up</button>
+                    <a href="{% url 'index' %}" class="btn btn-default role="button">Cancel</a>
+                    <p class="mt-2"><a href="{% url 'login' %}" class="text-muted">Do you have an account?</a></p>
                 </div>
-
             </form>
         </div>
     </div>
