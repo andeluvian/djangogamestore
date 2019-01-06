@@ -9,7 +9,7 @@
             <h3 class="my-3">Register</h3>
             <form method="post">
                 {% csrf_token %}
-                <!-- django tweaks code reference: https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html-->
+                <!-- Adopted from: https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html-->
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
                 {% endfor %}
@@ -18,15 +18,18 @@
                     <div class="form-group">
                         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field|add_class:'form-control' }}
-                        {% for error in field.errors %}
-                            <span class="help-block">{{ error }}</span>
-                        {% endfor %}
                     </div>
+                {% endfor %}<!-- /Adopted from -->
+
+                <ul class="list-unstyled">
+                   {% for error in form.non_field_errors %}
+                    <li class="alert alert-danger">{{ error }}</li>
                 {% endfor %}
-                <!-- /django tweaks code reference -->
+                </ul>
+
                 <div class="form-group">
                     <button type="submit" name="button" class="btn btn-primary">Sign-up</button>
-                    <a href="{% url 'index' %}" class="btn btn-default role="button">Cancel</a>
+                    <a href="{% url 'index' %}" class="btn btn-default role=" button">Cancel</a>
                     <p class="mt-2"><a href="{% url 'login' %}" class="text-muted">Do you have an account?</a></p>
                 </div>
             </form>
