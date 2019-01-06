@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
+from django.views.generic import TemplateView, ListView
+from .models import Game
 
 # Create your views here.
 def index(request):
@@ -12,3 +14,24 @@ def login(request):
 
 def register(request):
     return render(request, 'register.html', {'context': 'context'})
+
+def game_list(request):
+    template_name = "gamelist.html"
+    queryset = Game.objects.all()
+    context = {
+
+        "object_list": queryset
+    }
+    return render(request, template_name, context)
+
+
+
+class GameList(ListView):
+    queryset = Game.objects.all()
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        return context
+
+#class GameDetail(DetailView):
+#    model = Game

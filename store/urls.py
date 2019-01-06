@@ -23,4 +23,5 @@ urlpatterns = [
     # path('game/<slug:title>/play/', views.index, name='index'), # play game @player @bought
     # path('game/<slug:title>/edit/', views.index, name='index'), # edit game @developer
     # path('game/<slug:title>/delete/', views.index, name='index'), # delete game @developer
+    path('gamelist/', views.index, name='gamelist')
 ]
