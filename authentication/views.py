@@ -1,70 +1,85 @@
-from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
-from django.contrib.auth import (
-    authenticate,
-    get_user_model,
-    login,
-    logout
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
-)
-
-
-##This is old login form, test do not work
-""""
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created succesfully! Login and enjoy our site!')
-            return redirect('login')
-    else:
-        form = UserRegisterForm()
-    return render(request, 'register.html', {'form':form})
-"""
-
-from .forms import (
-UserLoginForm,
-UserRegistrationForm
-)
+from .forms import UserLoginForm, UserRegistrationForm
+from .tokens import account_activation_token
 
 
 def login_view(request):
-#    next = request.Get.get('next')
+    #    next = request.Get.get('next')
     form = UserLoginForm(request.POST or None)
     if form.is_valid():
-         username = form.cleaned_data.get('username')
-         password = form.cleaned_data.get('password')
-         user = authenticate(username=username, password=password)
-         login(request, user)
-         if next:
-             return redirect(next)
-         return redirect('/')
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        if next:
+            return redirect(next)
+        return redirect('/')
     context = {
         'form': form
     }
-    print('Hello')
-    return render(request, 'login.html', context)
+    return render(request, 'registration/login.html', context)
+
 
 def register_view(request):
-#     next = request.Get.get('next')
-     form = UserRegistrationForm(request.POST or None)
-     if form.is_valid():
-         user = form.save(commit=False)
-         password = form.cleaned_data.get('password')
-         user.set_password(password)
-         user.save()
-         new_user = authenticate(username=user.username, password=password)
-         login(request, new_user)
-         if next:
-             return redirect(next)
-         return redirect('/')
-     context = {
-         'form': form
+    #     next = request.Get.get('next')
+    form = UserRegistrationForm(request.POST or None)
+    if form.is_valid():
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+        user.is_active = False
+        user.save()
+        current_site = get_current_site(request)
+        subject = 'Activate Your JavaScript GameStore Account'
+        message = render_to_string('account_activation_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+            'token': account_activation_token.make_token(user),
+        })
+        user.email_user(subject, message)
+        return redirect('account_activation_sent')
 
-     }
+        # password = form.cleaned_data.get('password')
+        # user.set_password(password)
+        # new_user = authenticate(username=user.username, password=password)
+        # login(request, new_user)
+        # if next:
+        #     return redirect(next)
+        # return redirect('/')
+    context = {
+        'form': form
+    }
+    return render(request, "register.html", context)
 
-     return render(request, "register.html", context)
+
+def account_activation_sent(request):
+    return render(request, 'account_activation_sent.html', {'context': 'context'})
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.profile.email_confirmed = True
+        user.save()
+        login(request, user)
+        return redirect('index')
+    else:
+        return render(request, 'account_activation_invalid.html')
+
+
+# Email activate feature
+# source: https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
