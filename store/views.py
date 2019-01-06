@@ -15,11 +15,11 @@ def login(request):
 def register(request):
     return render(request, 'register.html', {'context': 'context'})
 
-def game_list(request):
+def gamelist(request):
     template_name = "gamelist.html"
     queryset = Game.objects.all()
     context = {
-
+        "name" : "kena",
         "object_list": queryset
     }
     return render(request, template_name, context)
