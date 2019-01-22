@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% load payment_extras %}
+
+
+{% block title %} Transaction {% endblock %}
+
+{% block main-content %}
+
+<div class="my-3">
+    <h3>Transaction</h3>
+</div>
+
+<div class="table-responsive border rounded my-3">
+    <table class="table m-0">
+        <tbody>
+            <tr>
+                <th class="border-0">ID</th>
+                <td class="border-0">{{ transaction.pid }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ transaction.created|date:'Y-m-d H:i:s' }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ transaction.updated|date:'Y-m-d H:i:s' }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ transaction.amount|price }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ transaction.state }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="my-3">
+    <a href="{% url 'payment_list' %}" class="btn btn-primary">Back</a>
+</div>
+
+{% endblock %}

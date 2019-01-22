@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+{% load payment_extras %}
+
+
+{% block title %} Transactions {% endblock %}
+
+{% block main-content %}
+
+<div class="my-3">
+    <h3>Transactions</h3>
+</div>
+
+<div class="table-responsive border rounded my-3">
+    <table class="table m-0">
+        <thead>
+            <tr>
+                <th class="border-0" scope="col">Time</th>
+                <th class="border-0" scope="col">ID</th>
+                <th class="border-0" scope="col">Amount</th>
+                <th class="border-0" scope="col">State</th>
+                <th class="border-0" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.created|date:'Y-m-d H:i:s' }}</td>
+                <td>{{ transaction.pid }}</td>
+                <td>{{ transaction.amount|price }}</td>
+                <td>
+
+                    {% if transaction.state == 'PENDING' %}
+                        <span class="text-warning">{{ transaction.state }}</span>
+                    {% endif %}
+                    
+                    {% if transaction.state == 'SUCCESS' %}
+                        <span class="text-success">{{ transaction.state }}</span>
+                    {% endif %}
+
+                    {% if transaction.state == 'CANCEL' %}
+                        <span class="text-muted">{{ transaction.state }}</span>
+                    {% endif %}
+
+                    {% if transaction.state == 'ERROR' %}
+                        <span class="text-danger">{{ transaction.state }}</span>
+                    {% endif %}
+
+                </td>
+                <td><a href="{% url 'payment_detail' uuid=transaction.pid %}">Details</a></td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        <span class="current">
+            Showing {{ transactions.start_index }}-{{ transactions.end_index }} of {{ transactions.paginator.count }} results
+        </span>
+    </div>
+    <div class="col">
+        <nav aria-label="Page navigation" class="float-right">
+            <ul class="pagination">
+
+            {% if transactions.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ transactions.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            
+            {% for page in transactions.paginator.page_range %}
+                {% if transactions.number == page %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ transactions }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if transactions.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ transactions.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ transactions.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock %}

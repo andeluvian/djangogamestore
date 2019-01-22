@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load payment_extras %}
+
+
+{% block title %} Payment {% endblock %}
+
+{% block main-content %}
+
+<div class="my-3">
+    <h3>Payment</h3>
+</div>
+
+<div class="my-3">
+    <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
+        <input type="hidden" name="pid" value="{{ pid }}" />
+        <input type="hidden" name="sid" value="{{ sid }}" />
+        <input type="hidden" name="amount" value="{{ amount }}" />
+        <input type="hidden" name="success_url" value="http://localhost:8000{% url 'payment_processing' %}" />
+        <input type="hidden" name="cancel_url" value="http://localhost:8000{% url 'payment_processing' %}" />
+        <input type="hidden" name="error_url" value="http://localhost:8000{% url 'payment_processing' %}" />
+        <input type="hidden" name="checksum" value="{{ checksum }}" />
+
+        <input type="hidden" name="dev" value="on" />
+
+        <div class="table-responsive border rounded">
+            <table class="table m-0">
+                <tbody>
+                    <tr>
+                        <th class="border-0">Game</th>
+                        <td class="border-0"></td>
+                    </tr>
+                    <tr>
+                        <th>Account</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Price</th>
+                        <td>{{ amount|price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row my-3">
+            <div class="col">
+                <button type="submit" class="btn btn-primary float-right">Purchase</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
