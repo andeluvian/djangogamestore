@@ -92,7 +92,7 @@ HTTPS and SSL will not be included in this project due to it not being within th
 
 #### Database version 0.2
 
-![ER-diagram of the gamestore database](database_erd.jpg)
+![ER-diagram of the gamestore database](docs/database_erd.jpg)
 
 #### Database version 0.1
 
@@ -108,7 +108,7 @@ HTTPS and SSL will not be included in this project due to it not being within th
 
 ### 3.6. Layout
 
-![Wireframe of the layout](wireframe.png)
+![Wireframe of the layout](docs/wireframe.png)
 
 ## 4. Process and Time Schedule
 
