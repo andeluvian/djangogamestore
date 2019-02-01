@@ -3,17 +3,13 @@
 {% block title %}Home{% endblock %}
 
 {% block main-content %}
-    <div class="row">
-        <div class="col">
-            <p>Index page main content area.</p>
-            {% if user.is_authenticated %}
-                <p>Logged in as {{ user.username }}</p>
-            {% else %}
-                <p>Browsing as anonymous (not logged in)</p>
-            {% endif %}
-            <p>Users registered: {{ user_count }}</p>  <!-- Only to verify the registration form works, delete later -->
+    <div class="row text-center mt-4">
+    {% for game in games %}
+        <div class="col-lg-3 col-md-4 col-xs-6">
+            <a href="#" class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail" src="uploads/{{ game.cover_image }}" alt="">
+            </a>
         </div>
+    {% endfor %}
     </div>
-
-
 {% endblock %}
