@@ -34,7 +34,6 @@ def add_game(request):
         form = GameForm()
         context = {'form': form}
         return render(request, 'add_game.html', context)
-
     form = GameForm()
     context = {'form': form}
     return render(request, 'add_game.html', context)
