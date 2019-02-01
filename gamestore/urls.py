@@ -26,5 +26,6 @@ urlpatterns = [
     path('', include('authentication.urls')),
     # path('login/', auth_views.login_view, name='login'),
     path('register/', auth_views.register_view, name='register'),
+
     re_path(r'^uploads/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT, }),  # TODO: Remove for production
 ]
