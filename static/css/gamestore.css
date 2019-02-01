@@ -1,0 +1,20 @@
+.bg {
+    background-image: url("../img/background.png");
+    height: 100%;
+}
+
+.bg-dark {
+    background-color: #32383e !important;
+}
+
+.container {
+    color: #f8f9fa;
+    min-height: 94vh;
+}
+
+#logo {
+    width: 225px;
+    height: auto;
+}
+
+
