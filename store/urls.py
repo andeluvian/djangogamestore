@@ -13,8 +13,8 @@ urlpatterns = [
     # path('player/', views.index, name='index'), # show bought games @player
     # path('player/purchases/', views.index, name='index'), # show purchase history @player
     #
-    # path('developer/', views.index, name='index'), # show own games @developer
-    # path('developer/submit/', views.index, name='index'), # submit new game @developer
+    path('developer/', views.developer_profile_page, name='dev_profile'),  # show own games @developer
+    path('developer/submit/', views.add_game, name='add_game'),  # submit new game @developer
     #
     # path('search/', views.index, name='index'), # search, parameters via request.GET
     #

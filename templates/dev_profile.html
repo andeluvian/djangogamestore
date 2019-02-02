@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Developer Profile{% endblock %}
+{% block main-content %}
+    <h1>Dev Profile Page for {{ user }}</h1>
+    <p>Your games:</p>
+    <ul>
+    {% for game in games %}
+        <li>{{ game.title }}</li>
+    {%  endfor %}
+    </ul>
+    <a href="{% url 'add_game' %}">Add new game</a>
+{% endblock %}
