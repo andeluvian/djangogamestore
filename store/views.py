@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
 
 from .forms import GameForm
 from .models import Game
@@ -8,6 +9,11 @@ from .models import Game
 def index(request):
     games = Game.objects.all()
     return render(request, 'index.html', {'games': games})
+
+
+class GameDetailView(DetailView):
+    model = Game
+    template_name = 'detail.html'
 
 
 @login_required
@@ -34,9 +40,6 @@ def add_game(request):
         form = GameForm()
         context = {'form': form}
         return render(request, 'add_game.html', context)
-    form = GameForm()
-    context = {'form': form}
-    return render(request, 'add_game.html', context)
 
 
 def login(request):

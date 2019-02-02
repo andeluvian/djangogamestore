@@ -6,8 +6,9 @@
     <div class="row text-center">
     {% for game in games %}
         <div class="col-lg-3 col-md-4 col-xs-6">
-            <a href="#" class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="uploads/{{ game.cover_image }}" alt="">
+            <a href="{% url 'game_detail' game.pk %}" class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail" src="{{ game.cover_image.url }}"
+                     alt="{{ game.title }}">
             </a>
         </div>
     {% endfor %}

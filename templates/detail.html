@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}Game Detail{% endblock %}
+
+{% block main-content %}
+
+    <h1>{{ object.title }}</h1>
+    <img src="{{ object.cover_image.url }}" alt="{{ object.title }}">
+    <p style="color: yellow">TODO: Do we need a description field?</p>
+    <p>Price: {{ object.price }}</p>
+    <input type="submit" value="Play Game">
+    <input type="submit" value="Buy Game">
+    <p style="color: yellow">TODO: Build the logic to check if user owns the game</p>
+
+{% endblock %}
