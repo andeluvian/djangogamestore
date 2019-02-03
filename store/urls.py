@@ -18,9 +18,9 @@ urlpatterns = [
     #
     # path('search/', views.index, name='index'), # search, parameters via request.GET
     #
-    # path('game/<slug:title>', views.index, name='index'), # game details
+    path('game/<int:pk>', views.GameDetailView.as_view(), name='game_detail'), # game details
     # path('game/<slug:title>/buy/', views.index, name='index'), # buy game @player
     # path('game/<slug:title>/play/', views.index, name='index'), # play game @player @bought
-    # path('game/<slug:title>/edit/', views.index, name='index'), # edit game @developer
+    path('game/<int:pk>/edit/', views.GameEditView.as_view(), name='game_edit'), # edit game @developer
     # path('game/<slug:title>/delete/', views.index, name='index'), # delete game @developer
 ]

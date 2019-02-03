@@ -7,7 +7,7 @@
     <p>Your games:</p>
     <ul>
     {% for game in games %}
-        <li>{{ game.title }}</li>
+        <li><a href="{% url 'game_edit' pk=game.pk %}">{{ game.title }}</a></li>
     {%  endfor %}
     </ul>
     <a href="{% url 'add_game' %}">Add new game</a>
