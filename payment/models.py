@@ -1,6 +1,8 @@
 import uuid
 from decimal import Decimal
 from django.db import models
+from django.contrib.auth.models import User
+from store.models import Game
 
 
 class Transaction(models.Model):
@@ -18,5 +20,5 @@ class Transaction(models.Model):
         ),
         default = 'PENDING'
     )
-    # game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    # user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
