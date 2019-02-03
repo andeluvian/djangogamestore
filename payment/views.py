@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from hashlib import md5
 from .models import Transaction
+from django.contrib.auth.models import User
+from store.models import Game
 
 
 # TODO: replace with environmental variables
@@ -22,26 +24,32 @@ def generate_checksum(list):
 
 
 @login_required
+def payment_view(request, id):
+    game = Game.objects.get(id=id)
+    amount = game.price
 
-    # game_id = request.GET.get('id')
-    # game = Game.objects.get(id=id)
+    username = request.user.username
+    user = User.objects.get(username=username)
 
-    pid = uuid.uuid4()
-    amount = 5.00
-    checksum = generate_checksum({'pid': pid, 'sid': seller_id, 'amount': amount, 'token': seller_key})
+    # use an unverified transaction if one exists, otherwise create a new one
+    existing_transaction = Transaction.objects.filter(user=user).filter(state='PENDING')
+    if existing_transaction.exists():
+        obj = existing_transaction.first()
+        pid = obj.pid
+        checksum = generate_checksum({'pid': pid, 'sid': seller_id, 'amount': amount, 'token': seller_key})
+    else:
+        pid = uuid.uuid4()
+        checksum = generate_checksum({'pid': pid, 'sid': seller_id, 'amount': amount, 'token': seller_key})
+        obj = Transaction(pid=pid, amount=amount, user=user, game=game)
+        obj.save()
 
-    obj = Transaction(pid=pid, amount=amount)
-    obj.save()
-
-    context = {'pid': pid,'sid': seller_id,'amount': amount,'checksum': checksum}
+    context = {'pid': pid,'sid': seller_id,'amount': amount,'checksum': checksum, 'username': username, 'game': game.title }
 
     return render(request, 'payment/payment.html', context)
 
 
 @login_required
 def processing_view(request):
-    # TODO: change status to SUCCESS if valid
-    # TODO: grant access to game if valid
     # TODO: redirect to game page
 
     pid = request.GET.get('pid')
@@ -79,6 +87,10 @@ def list_view(request):
     transactions = paginator.get_page(page)
 
     return render(request, 'payment/payment_list.html', { 'transactions': transactions })
+
+
+# TODO: list transactions for user
+# TODO: list transactions for game
 
 
 # Pagination
