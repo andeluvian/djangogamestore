@@ -1,6 +1,7 @@
 import uuid
 import urllib.request
 import urllib.parse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
@@ -20,10 +21,7 @@ def generate_checksum(list):
     return checksum
 
 
-def payment_view(request):
-    # TODO: integrate with game model to fetch reliable price information
-    # TODO: limit access to logged in users
-    # TODO: if user has an existing pending transaction, use that instead of creating a new one
+@login_required
 
     # game_id = request.GET.get('id')
     # game = Game.objects.get(id=id)
@@ -40,6 +38,7 @@ def payment_view(request):
     return render(request, 'payment/payment.html', context)
 
 
+@login_required
 def processing_view(request):
     # TODO: change status to SUCCESS if valid
     # TODO: grant access to game if valid
