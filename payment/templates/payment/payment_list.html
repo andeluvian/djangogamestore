@@ -25,28 +25,10 @@
             
         {% for transaction in transactions %}
             <tr>
-                <td>{{ transaction.created|date:'Y-m-d H:i:s' }}</td>
+                <td>{{ transaction.updated|date:'Y-m-d H:i:s' }}</td>
                 <td>{{ transaction.pid }}</td>
                 <td>{{ transaction.amount|price }}</td>
-                <td>
-
-                    {% if transaction.state == 'PENDING' %}
-                        <span class="text-warning">{{ transaction.state }}</span>
-                    {% endif %}
-                    
-                    {% if transaction.state == 'SUCCESS' %}
-                        <span class="text-success">{{ transaction.state }}</span>
-                    {% endif %}
-
-                    {% if transaction.state == 'CANCEL' %}
-                        <span class="text-muted">{{ transaction.state }}</span>
-                    {% endif %}
-
-                    {% if transaction.state == 'ERROR' %}
-                        <span class="text-danger">{{ transaction.state }}</span>
-                    {% endif %}
-
-                </td>
+                <td>{{ transaction.state }}</td>
                 <td><a href="{% url 'payment_detail' uuid=transaction.pid %}">Details</a></td>
             </tr>
         {% endfor %}
@@ -63,7 +45,7 @@
     </div>
     <div class="col">
         <nav aria-label="Page navigation" class="float-right">
-            <ul class="pagination">
+            <ul class="pagination pg-outline-light">
 
             {% if transactions.has_previous %}
                 <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
