@@ -8,17 +8,19 @@ from django.core.paginator import Paginator
 from hashlib import md5
 from .models import Transaction
 from django.contrib.auth.models import User
+from payment.models import Transaction
 from store.models import Game
 
 
+# TODO: create new id and key before final push to production
 # TODO: replace with environmental variables
 seller_id = 'SmallGameStore'
 seller_key = '19467677922774a4b3de618c3f86177f'
 
 
 def generate_checksum(list):
-    list_str = urllib.parse.urlencode(list)
-    md = md5(list_str.encode("ascii"))
+    str = urllib.parse.urlencode(list)
+    md = md5(str.encode("ascii"))
     checksum = md.hexdigest()
     return checksum
 
@@ -54,17 +56,15 @@ def checkout_view(request, pk):
 
 
 @login_required
-def processing_view(request):
-    # TODO: redirect to game page
-
+def verification_view(request):
     pid = request.GET.get('pid')
     ref = request.GET.get('ref')
     result = request.GET.get('result')
     checksum = request.GET.get('checksum')
-    local_checksum = generate_checksum({'pid': pid, 'ref': ref, 'result': result, 'token': seller_key})
+    local = generate_checksum({'pid': pid, 'ref': ref, 'result': result, 'token': seller_key})
 
+    if checksum == local:
     obj = Transaction.objects.get(pid=pid)
-    if checksum == local_checksum:
         if result == 'success':
             obj.state = 'SUCCESS'
             obj.save()
@@ -74,7 +74,7 @@ def processing_view(request):
         else:
             obj.state = 'ERROR'
             obj.save()
-    return redirect('index')
+    return redirect('game_detail', pk=obj.game.pk)
 
 
 def detail_view(request, uuid):
