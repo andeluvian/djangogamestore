@@ -7,7 +7,12 @@ register = template.Library()
 
 @register.filter(name='price')
 def price(value):
-    return '%.2f €' % value
+    if value is None:
+        s = ''
+    else:
+        s = '%.2f€' % value
+        s = s.replace('.', ',')
+    return s
 
 
 @register.filter(name='has_game')
