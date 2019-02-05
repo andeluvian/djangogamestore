@@ -6,8 +6,7 @@
 {% block main-content %}
 
     <h1>{{ object.title }}</h1>
-    <img src="{{ object.cover_image.url }}" alt="{{ object.title }}" width="100%">
-    <p style="color: yellow">TODO: Do we need a description field?</p>
+    <img src="{{ object.cover_image.url }}" alt="{{ object.title }}" style="max-width: 100%">
 
     {% if user.is_authenticated %}
 
@@ -17,14 +16,14 @@
 
         {% else %}
 
-            <p>Price: {{ object.price }}</p>
+            <p>Price: {{ object.price|price }}</p>
             <a href="http://localhost:8000{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
 
         {% endif %}
 
     {% else %}
 
-        <p>Price: {{ object.price }}</p>
+        <p>Price: {{ object.price|price }}</p>
         <a href="http://localhost:8000{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
 
     {% endif %}
