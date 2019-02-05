@@ -17,4 +17,4 @@ def price(value):
 
 @register.filter(name='has_game')
 def has_game(user, game):
-    return Transaction.objects.filter(user=user).filter(game=game).exists()
+    return Transaction.objects.filter(user=user).filter(game=game).filter(state='SUCCESS').exists()
