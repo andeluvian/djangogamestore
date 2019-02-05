@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.db.models import Sum
 from hashlib import md5
-from .models import Transaction
 from django.contrib.auth.models import User
 from payment.models import Transaction
 from store.models import Game
@@ -64,7 +64,7 @@ def verification_view(request):
     local = generate_checksum({'pid': pid, 'ref': ref, 'result': result, 'token': seller_key})
 
     if checksum == local:
-    obj = Transaction.objects.get(pid=pid)
+        obj = Transaction.objects.get(pid=pid)
         if result == 'success':
             obj.state = 'SUCCESS'
             obj.save()
@@ -85,7 +85,7 @@ def detail_view(request, uuid):
     transaction = Transaction.objects.get(pid=uuid)
 
     if transaction.user == user:
-    return render(request, 'payment/payment_detail.html', { 'transaction': transaction })
+        return render(request, 'payment/payment_detail.html', { 'transaction': transaction })
     return redirect('payment_list')
 
 
@@ -99,12 +99,28 @@ def list_view(request):
 
     page = request.GET.get('page', 1)
     transactions = paginator.get_page(page)
-
+    
     return render(request, 'payment/payment_list.html', { 'transactions': transactions })
 
 
-# TODO: list transactions for user
-# TODO: list transactions for game
+@login_required
+def sales_view(request, pk):
+    game = Game.objects.get(pk=pk)
+    username = request.user.username
+    user = User.objects.get(username=username)
+    if game.game_owner == user:
+        transaction_list = Transaction.objects.filter(game=game).filter(state='SUCCESS')
+        reversed_transactions = list(reversed(transaction_list))
+        paginator = Paginator(reversed_transactions, 25)
+
+        page = request.GET.get('page', 1)
+        transactions = paginator.get_page(page)
+
+        total = list(transaction_list.aggregate(total_price=Sum('amount')).values())[0]
+
+        return render(request, 'payment/payment_sales.html', { 'game': game, 'transactions': transactions, 'total': total })
+    else:
+        return redirect('index')
 
 
 # Pagination

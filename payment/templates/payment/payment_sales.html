@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% load payment_extras %}
+
+
+{% block title %} Transactions {% endblock %}
+
+{% block main-content %}
+
+<div class="my-3">
+    <h3>Sales</h3>
+</div>
+
+<div class="table-responsive border rounded my-3">
+    <table class="table m-0">
+        <thead>
+            <tr>
+                <th class="border-0">Game</th>
+                <th class="border-0">Total sales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ game.title }}</td>
+                <td>{{ total|price }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="table-responsive border rounded my-3">
+    <table class="table m-0">
+        <thead>
+            <tr>
+                <th class="border-0" scope="col">Time</th>
+                <th class="border-0" scope="col">ID</th>
+                <th class="border-0" scope="col">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.updated|date:'Y-m-d H:i:s' }}</td>
+                <td>{{ transaction.pid }}</td>
+                <td>{{ transaction.amount|price }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="row my-3">
+    <div class="col">
+        <span class="current">
+            Showing {{ transactions.start_index }}-{{ transactions.end_index }} of {{ transactions.paginator.count }} results
+        </span>
+    </div>
+    <div class="col">
+        <nav aria-label="Page navigation" class="float-right">
+            <ul class="pagination pg-outline-light">
+
+            {% if transactions.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ transactions.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            
+            {% for page in transactions.paginator.page_range %}
+                {% if transactions.number == page %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ transactions }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if transactions.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ transactions.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ transactions.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock %}
