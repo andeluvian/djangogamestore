@@ -17,14 +17,14 @@
         {% else %}
 
             <p>Price: {{ object.price|price }}</p>
-            <a href="http://localhost:8000{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
+            <a href="{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
 
         {% endif %}
 
     {% else %}
 
         <p>Price: {{ object.price|price }}</p>
-        <a href="http://localhost:8000{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
+        <a href="{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
 
     {% endif %}
 
