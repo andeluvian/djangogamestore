@@ -77,14 +77,23 @@ def verification_view(request):
     return redirect('game_detail', pk=obj.game.pk)
 
 
+@login_required
 def detail_view(request, uuid):
+    username = request.user.username
+    user = User.objects.get(username=username)
+
     transaction = Transaction.objects.get(pid=uuid)
 
+    if transaction.user == user:
     return render(request, 'payment/payment_detail.html', { 'transaction': transaction })
+    return redirect('payment_list')
 
 
+@login_required
 def list_view(request):
-    transaction_list = Transaction.objects.all()
+    username = request.user.username
+    user = User.objects.get(username=username)
+    transaction_list = Transaction.objects.filter(user=user)
     reversed_transactions = list(reversed(transaction_list))
     paginator = Paginator(reversed_transactions, 25)
 
