@@ -24,17 +24,22 @@ def generate_checksum(list):
 
 
 @login_required
-def payment_view(request, id):
-    game = Game.objects.get(id=id)
+def checkout_view(request, pk):
+    game = Game.objects.get(pk=pk)
     amount = game.price
-
     username = request.user.username
     user = User.objects.get(username=username)
 
-    # use an unverified transaction if one exists, otherwise create a new one
-    existing_transaction = Transaction.objects.filter(user=user).filter(state='PENDING')
-    if existing_transaction.exists():
-        obj = existing_transaction.first()
+    transactions = Transaction.objects.filter(user=user).filter(game=game)
+
+    # if game is already paid for
+    if transactions.filter(state='SUCCESS').exists():
+        return redirect('game_detail', pk=pk)
+
+    # if a transaction exists but still needs to be paid, else create a new transaction
+    pending_transaction = transactions.filter(state='PENDING')
+    if pending_transaction.exists():
+        obj = pending_transaction.first()
         pid = obj.pid
         checksum = generate_checksum({'pid': pid, 'sid': seller_id, 'amount': amount, 'token': seller_key})
     else:
@@ -45,7 +50,7 @@ def payment_view(request, id):
 
     context = {'pid': pid,'sid': seller_id,'amount': amount,'checksum': checksum, 'username': username, 'game': game.title }
 
-    return render(request, 'payment/payment.html', context)
+    return render(request, 'payment/payment_checkout.html', context)
 
 
 @login_required
