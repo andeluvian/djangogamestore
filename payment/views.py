@@ -5,36 +5,43 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.db.models import Sum
 from hashlib import md5
-from .models import Transaction
 from django.contrib.auth.models import User
+from payment.models import Transaction
 from store.models import Game
 
 
+# TODO: create new id and key before final push to production
 # TODO: replace with environmental variables
 seller_id = 'SmallGameStore'
 seller_key = '19467677922774a4b3de618c3f86177f'
 
 
 def generate_checksum(list):
-    list_str = urllib.parse.urlencode(list)
-    md = md5(list_str.encode("ascii"))
+    str = urllib.parse.urlencode(list)
+    md = md5(str.encode("ascii"))
     checksum = md.hexdigest()
     return checksum
 
 
 @login_required
-def payment_view(request, id):
-    game = Game.objects.get(id=id)
+def checkout_view(request, pk):
+    game = Game.objects.get(pk=pk)
     amount = game.price
-
     username = request.user.username
     user = User.objects.get(username=username)
 
-    # use an unverified transaction if one exists, otherwise create a new one
-    existing_transaction = Transaction.objects.filter(user=user).filter(state='PENDING')
-    if existing_transaction.exists():
-        obj = existing_transaction.first()
+    transactions = Transaction.objects.filter(user=user).filter(game=game)
+
+    # if game is already paid for
+    if transactions.filter(state='SUCCESS').exists():
+        return redirect('game_detail', pk=pk)
+
+    # if a transaction exists but still needs to be paid, else create a new transaction
+    pending_transaction = transactions.filter(state='PENDING')
+    if pending_transaction.exists():
+        obj = pending_transaction.first()
         pid = obj.pid
         checksum = generate_checksum({'pid': pid, 'sid': seller_id, 'amount': amount, 'token': seller_key})
     else:
@@ -45,21 +52,19 @@ def payment_view(request, id):
 
     context = {'pid': pid,'sid': seller_id,'amount': amount,'checksum': checksum, 'username': username, 'game': game.title }
 
-    return render(request, 'payment/payment.html', context)
+    return render(request, 'payment/payment_checkout.html', context)
 
 
 @login_required
-def processing_view(request):
-    # TODO: redirect to game page
-
+def verification_view(request):
     pid = request.GET.get('pid')
     ref = request.GET.get('ref')
     result = request.GET.get('result')
     checksum = request.GET.get('checksum')
-    local_checksum = generate_checksum({'pid': pid, 'ref': ref, 'result': result, 'token': seller_key})
+    local = generate_checksum({'pid': pid, 'ref': ref, 'result': result, 'token': seller_key})
 
-    obj = Transaction.objects.get(pid=pid)
-    if checksum == local_checksum:
+    if checksum == local:
+        obj = Transaction.objects.get(pid=pid)
         if result == 'success':
             obj.state = 'SUCCESS'
             obj.save()
@@ -69,28 +74,53 @@ def processing_view(request):
         else:
             obj.state = 'ERROR'
             obj.save()
-    return redirect('index')
+    return redirect('game_detail', pk=obj.game.pk)
 
 
+@login_required
 def detail_view(request, uuid):
+    username = request.user.username
+    user = User.objects.get(username=username)
+
     transaction = Transaction.objects.get(pid=uuid)
 
-    return render(request, 'payment/payment_detail.html', { 'transaction': transaction })
+    if transaction.user == user:
+        return render(request, 'payment/payment_detail.html', { 'transaction': transaction })
+    return redirect('payment_list')
 
 
+@login_required
 def list_view(request):
-    transaction_list = Transaction.objects.all()
+    username = request.user.username
+    user = User.objects.get(username=username)
+    transaction_list = Transaction.objects.filter(user=user)
     reversed_transactions = list(reversed(transaction_list))
     paginator = Paginator(reversed_transactions, 25)
 
     page = request.GET.get('page', 1)
     transactions = paginator.get_page(page)
-
+    
     return render(request, 'payment/payment_list.html', { 'transactions': transactions })
 
 
-# TODO: list transactions for user
-# TODO: list transactions for game
+@login_required
+def sales_view(request, pk):
+    game = Game.objects.get(pk=pk)
+    username = request.user.username
+    user = User.objects.get(username=username)
+    if game.game_owner == user:
+        transaction_list = Transaction.objects.filter(game=game).filter(state='SUCCESS')
+        reversed_transactions = list(reversed(transaction_list))
+        paginator = Paginator(reversed_transactions, 25)
+
+        page = request.GET.get('page', 1)
+        transactions = paginator.get_page(page)
+
+        total = list(transaction_list.aggregate(total_price=Sum('amount')).values())[0]
+
+        return render(request, 'payment/payment_sales.html', { 'game': game, 'transactions': transactions, 'total': total })
+    else:
+        return redirect('index')
 
 
 # Pagination
