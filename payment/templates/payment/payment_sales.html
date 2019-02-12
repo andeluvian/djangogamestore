@@ -7,7 +7,24 @@
 {% block main-content %}
 
 <div class="my-3">
-    <h3>Transactions</h3>
+    <h3>Sales</h3>
+</div>
+
+<div class="table-responsive border rounded my-3">
+    <table class="table m-0">
+        <thead>
+            <tr>
+                <th class="border-0">Game</th>
+                <th class="border-0">Total sales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ game.title }}</td>
+                <td>{{ total|price }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="table-responsive border rounded my-3">
@@ -17,8 +34,6 @@
                 <th class="border-0" scope="col">Time</th>
                 <th class="border-0" scope="col">ID</th>
                 <th class="border-0" scope="col">Amount</th>
-                <th class="border-0" scope="col">State</th>
-                <th class="border-0" scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -28,8 +43,6 @@
                 <td>{{ transaction.updated|date:'Y-m-d H:i:s' }}</td>
                 <td>{{ transaction.pid }}</td>
                 <td>{{ transaction.amount|price }}</td>
-                <td>{{ transaction.state }}</td>
-                <td><a href="{% url 'payment_detail' uuid=transaction.pid %}">Details</a></td>
             </tr>
         {% endfor %}
 

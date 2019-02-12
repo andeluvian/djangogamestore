@@ -1,21 +1,12 @@
 $(document).ready(function()
 {
-
     'use strict';
-
-
-
-
     var frame = document.getElementById('game_iframe');
-
-
-
     function error(text) {
       var message =  {
         messageType: "ERROR",
         info: text
       };
-      //send message to iframe
       frame.contentWindow.postMessage(message, "*");
     }
 
@@ -24,66 +15,7 @@ $(document).ready(function()
 
       var data = evt.originalEvent.data;
 
-      if (data.messageType == 'SCORE') {
 
-        var score = data.score;
-
-        var title = $('#gameTitle').html();
-        $.ajax({
-          method: 'POST',
-          url: 'score/',
-          data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-          Score: score,
-          Title: title
-        },
-        success: function (data) {
-
-             $(".highscore").load(location.href + " .highscore");
-
-           },
-           error: function (data) {
-             error("Something went wrong with submitting highscores :( ");
-           }
-         });
-
-
-
-
-
-
-
-
-      }
-
-      if (data.messageType == 'SAVE') {
-        //implement SAVE
-
-        var gamestate = JSON.stringify(data.gameState);
-        var gametitle = $('#gameTitle').html();
-
-
-        $.ajax({
-          method: 'POST',
-          url: 'save/',
-          data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-          save_State: gamestate,
-          Title: gametitle
-        },
-
-        success: function (data) {
-
-             alert("game saved!");
-
-           },
-           error: function (data) {
-
-             error("Something went wrong with saving the game :( ");
-           }
-         });
-
-      }
-
-      if (data.messageType == 'LOAD_REQUEST') {
 
         var Title = $('#gameTitle').html();
 
@@ -107,7 +39,7 @@ $(document).ready(function()
            },
            error: function (data) {
 
-             error("Something went wrong with loading the game :( ");
+             error("unable to load game ");
            }
          });
 
@@ -117,6 +49,55 @@ $(document).ready(function()
 
 
       }
+
+      if (data.messageType == 'SAVE') {
+          var gamestate = JSON.stringify(data.gameState);
+        var gametitle = $('#gameTitle').html();
+
+
+        $.ajax({
+          method: 'POST',
+          url: 'save/',
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+          save_State: gamestate,
+          Title: gametitle
+        },
+
+        success: function (data) {
+
+             alert("game saved!");
+
+           },
+           error: function (data) {
+
+             error("Unable to save game");
+           }
+         });
+
+      }
+      if (data.messageType == 'SCORE') {
+
+        var score = data.score;
+
+        var title = $('#gameTitle').html();
+
+        $.ajax({
+          method: 'POST',
+          url: 'score/',
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}',
+          Score: score,
+          Title: title
+        },
+        success: function (data) {
+       $(".highscore").load(location.href + " .highscore");
+       },
+      error: function (data) {
+       error("Unable to submit score");
+           }
+         });
+
+      }
+      if (data.messageType == 'LOAD_REQUEST') {
 
       if (data.messageType == 'SETTING') {
 
