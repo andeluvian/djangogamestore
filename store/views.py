@@ -4,7 +4,7 @@ from django.core import exceptions
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
-
+from django.views.decorators.csrf import csrf_exempt
 from .forms import GameForm
 from .models import Game
 
@@ -67,3 +67,106 @@ class GameEditView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('game_edit', kwargs={'pk': self.object.id})
+
+
+@csrf_exempt
+def score(request):
+    if request.is_ajax():
+
+
+
+        request_data = request.POST
+        score = request_data.get('Score')
+        title = request_data.get('title')
+        player = request.user.username
+        obj = Game.objects.get(title=title)
+
+        # update highscores
+        if float(score) >= obj.Rank1pts:
+
+
+            obj.Rank3pts = obj.Rank2pts
+            obj.Rank3player = obj.Rank2player
+
+
+            obj.Rank2pts = obj.Rank1pts
+            obj.Rank2player = obj.Rank1player
+
+            obj.Rank1pts = score
+            obj.Rank1player = player
+            obj.save()
+
+        elif float(score) >= obj.Rank2pts:
+
+            obj.Rank3pts = obj.Rank2pts
+            obj.Rank3player = obj.Rank2player
+
+            obj.Rank2pts = score
+            obj.Rank2player = player
+            obj.save()
+
+        elif float(score) >= obj.Rank3pts:
+            obj.Rank3pts = score
+            obj.Rank3player = player
+            obj.save()
+
+
+        return HttpResponse("OK")
+
+
+
+
+@csrf_exempt
+def save(request):
+    if request.is_ajax():
+
+        request_data = request.POST
+        save_State = request_data.get('save_State')
+        title = request_data.get('Title')
+        player = request.user.username
+
+        try:
+            objects = Save.objects.filter(title=title)
+            obj = objects.get(user=player)
+
+            obj.gameState = save_State
+            obj.save()
+
+        except Save.DoesNotExist:
+            obj = Save()
+            obj.title = title
+            obj.user = player
+            obj.gameState = save_State
+            obj.save()
+
+        return HttpResponse("OK")
+
+
+@csrf_exempt
+def load(request):
+    if request.is_ajax():
+
+        request_data = request.POST
+        title = request_data.get('Title')
+        player = request.user.username
+
+        objects = Save.objects.filter(title=title)
+        obj = objects.get(user=player)
+
+
+        return HttpResponse(obj.gameState)
+
+
+
+
+def game(request, pk):
+
+    game = Game.objects.get(id=pk)
+    all_saves = Save.objects.all()
+
+    args = {'user': request.user, 'saves': all_saves, 'game': game}
+    return render(request, "play.html", args)
+
+def hardcoded(request):
+
+    return render(request, "hardcoded_game.html")
