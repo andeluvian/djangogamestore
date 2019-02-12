@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block main-content %}
+
+<div class="my-3">
+    <h2>Profile</h2>
+</div>
+
+<div class="my-3">
+    <ul class="list-unstyled">
+        <li class="my-3">
+            <div class="border-bottom"><h4><a href="{% url 'library' %}">Library</a></h4></div>
+            <div>Browse game library.</div>
+        </li>
+        <li class="my-3">
+            <div class="border-bottom"><h4><a href="#">Purchase history</a></h4></div>
+            <div>Show purchases.</div>
+        </li>
+        <li class="my-3">
+            <div class="border-bottom"><h4><a href="{% url 'dev_profile' %}">Developer</a></h4></div>
+            <div>Upload games as developer and track sales.</div>
+        </li>
+    </ul>
+</div>
+
+{% endblock %}
