@@ -9,6 +9,7 @@
 </div>
 
 <div class="my-3">
+{% if transactions %}
 {% for transaction in transactions %}
     {% with game=transaction.game %}
     <div>
@@ -16,6 +17,9 @@
     </div>
     {% endwith %}
 {% endfor %}
+{% else %}
+    No games found. Buy games from the <a href="{% url 'index' %}">store</a>.
+{% endif %}
 </div>
 
 {% endblock %}
