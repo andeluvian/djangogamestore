@@ -12,7 +12,10 @@ urlpatterns = [
 
     # path('player/', views.index, name='index'), # show bought games @player
     # path('player/purchases/', views.index, name='index'), # show purchase history @player
-    #
+
+    path('library/', views.library, name='library'),
+    path('user/', views.user_profile, name='user_profile'),
+    
     path('developer/', views.developer_profile_page, name='dev_profile'),  # show own games @developer
     path('developer/submit/', views.add_game, name='add_game'),  # submit new game @developer
     #

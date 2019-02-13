@@ -7,6 +7,7 @@ from django.views.generic.edit import UpdateView
 from django.views.decorators.csrf import csrf_exempt
 from .forms import GameForm
 from .models import Game
+from payment.models import Transaction
 
 
 def index(request):
@@ -17,6 +18,19 @@ def index(request):
 class GameDetailView(DetailView):
     model = Game
     template_name = 'detail.html'
+
+
+@login_required
+def library(request):
+    user = request.user
+    transactions = Transaction.objects.select_related('game').filter(user=user).filter(state='SUCCESS')
+    return render(request, 'library.html', {'transactions': transactions})
+
+
+@login_required
+def user_profile(request):
+    games = Game.objects.all()
+    return render(request, 'user_profile.html', {'games': games})
 
 
 @login_required
