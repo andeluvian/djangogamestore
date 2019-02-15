@@ -12,7 +12,7 @@
 
         {% if user|has_game:object %}
 
-            <a href="#" class="btn btn-light">Play</a>
+            <a href="{% url 'game' object.pk %}" class="btn btn-light">Play</a>
 
         {% else %}
 
