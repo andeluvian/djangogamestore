@@ -17,6 +17,6 @@ urlpatterns = [
     path('game/<int:pk>/play/save/', views.save, name='save'),
     path('game/<int:pk>/play/load/', views.load, name='load'),
     path('game/<int:pk>/play/score/', views.score, name='score'),
-    
+
     path('game/hardcoded/', views.hardcoded, name='hardcoded_game'),
 ]
