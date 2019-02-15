@@ -3,7 +3,7 @@ $(document).ready( function() {
 
 
     let frame = document.getElementById('game_iframe');
-    function catchError(text) {
+    function sendError(text) {
         let message =  {
             messageType: "ERROR",
             info: text
@@ -19,7 +19,7 @@ $(document).ready( function() {
             data: data,
             success: success,
             error: function() {
-                catchError(error_msg);
+                sendError(error_msg);
             }
         });
     }
