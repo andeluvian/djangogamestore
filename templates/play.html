@@ -11,21 +11,21 @@
             <div class="panel-body">
                 <h3 class="panel-title" id="gameTitle">{{ game.title }}</h3>
                 <hr>
-                <div class="container" id="Game" style="text-align: center;">
+                <div id="Game" style="text-align: center;">
                     <iframe id="game_iframe" name="game_iframe" width="500" height="500" class="embed-responsive-item" src="{{ game.game_file.url }}"></iframe>
                 </div>
                 <hr>
                 <div class="contact">
                     <h2>Leaderboard</h2>
-                    {% if highscores %}
                     <ol id="highscores">
+                    {% if highscores %}
                         {% for highscore in highscores %}
                             <li>{{ highscore.username }}: {{ highscore.score }}</li>
                         {% endfor %}
-                    </ol>
                     {% else %}
                     No highscores found.
                     {% endif %}
+                    </ol>
                 </div>
             </div>
         </div>
