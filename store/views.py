@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core import exceptions
+from django.core import exceptions, serializers
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.decorators.csrf import csrf_exempt
-from .forms import GameForm
-from .models import Game
 from payment.models import Transaction
+from .forms import GameForm
+from .models import Game, Save, Highscore
 
 
 def index(request):
@@ -84,103 +85,62 @@ class GameEditView(LoginRequiredMixin, UpdateView):
 
 
 @csrf_exempt
-def score(request):
+def score(request, pk):
     if request.is_ajax():
+        score = int(request.POST.get('score'))
+        username = request.user.username
+        obj = Game.objects.get(pk=pk)
 
+        highscore = Highscore(username=username, score=score)
+        highscore.save()
 
+        obj.highscores.add(highscore)
 
-        request_data = request.POST
-        score = request_data.get('Score')
-        title = request_data.get('title')
-        player = request.user.username
-        obj = Game.objects.get(title=title)
+        highscores = obj.highscores.all().order_by('-score')
+        keep = highscores[:5]
 
-        # update highscores
-        if float(score) >= obj.Rank1pts:
+        if highscores.count() > 5:
+            highscores.exclude(pk__in=keep).delete()
 
+        data = serializers.serialize('json', keep)
 
-            obj.Rank3pts = obj.Rank2pts
-            obj.Rank3player = obj.Rank2player
-
-
-            obj.Rank2pts = obj.Rank1pts
-            obj.Rank2player = obj.Rank1player
-
-            obj.Rank1pts = score
-            obj.Rank1player = player
-            obj.save()
-
-        elif float(score) >= obj.Rank2pts:
-
-            obj.Rank3pts = obj.Rank2pts
-            obj.Rank3player = obj.Rank2player
-
-            obj.Rank2pts = score
-            obj.Rank2player = player
-            obj.save()
-
-        elif float(score) >= obj.Rank3pts:
-            obj.Rank3pts = score
-            obj.Rank3player = player
-            obj.save()
-
-
-        return HttpResponse("OK")
-
-
+        return HttpResponse(data)
 
 
 @csrf_exempt
-def save(request):
+def save(request, pk):
     if request.is_ajax():
-
-        request_data = request.POST
-        save_State = request_data.get('save_State')
-        title = request_data.get('Title')
-        player = request.user.username
+        gameState = request.POST.get('save_state')
+        user = request.user
 
         try:
-            objects = Save.objects.filter(title=title)
-            obj = objects.get(user=player)
-
-            obj.gameState = save_State
+            obj = Save.objects.filter(game__pk=pk).get(user=user)
+            obj.gameState = gameState
             obj.save()
-
         except Save.DoesNotExist:
-            obj = Save()
-            obj.title = title
-            obj.user = player
-            obj.gameState = save_State
+            game = Game.objects.get(pk=pk)
+            obj = Save(game=game, user=user, gameState=gameState)
             obj.save()
 
         return HttpResponse("OK")
 
 
 @csrf_exempt
-def load(request):
+def load(request, pk):
+    """Fetch game save to send to iframe."""
     if request.is_ajax():
-
-        request_data = request.POST
-        title = request_data.get('Title')
-        player = request.user.username
-
-        objects = Save.objects.filter(title=title)
-        obj = objects.get(user=player)
-
-
+        user = request.user
+        obj = Save.objects.filter(game__pk=pk).get(user=user)
         return HttpResponse(obj.gameState)
 
 
-
-
+@login_required
 def game(request, pk):
-
-    game = Game.objects.get(id=pk)
-    all_saves = Save.objects.all()
-
-    args = {'user': request.user, 'saves': all_saves, 'game': game}
+    game = Game.objects.get(pk=pk)
+    highscores = game.highscores.all().order_by('-score')[:5]
+    args = {'user': request.user, 'game': game, 'highscores': highscores}
     return render(request, "play.html", args)
 
-def hardcoded(request):
 
+def hardcoded(request):
     return render(request, "hardcoded_game.html")
