@@ -88,50 +88,50 @@ class GameEditView(LoginRequiredMixin, UpdateView):
 @ajax_required
 @csrf_exempt
 def score(request, pk):
-        score = int(request.POST.get('score'))
-        username = request.user.username
-        obj = Game.objects.get(pk=pk)
+    score = int(request.POST.get('score'))
+    username = request.user.username
+    obj = Game.objects.get(pk=pk)
 
-        highscore = Highscore(username=username, score=score)
-        highscore.save()
+    highscore = Highscore(username=username, score=score)
+    highscore.save()
 
-        obj.highscores.add(highscore)
+    obj.highscores.add(highscore)
 
-        highscores = obj.highscores.all().order_by('-score')
-        keep = highscores[:5]
+    highscores = obj.highscores.all().order_by('-score')
+    keep = highscores[:5]
 
-        if highscores.count() > 5:
-            highscores.exclude(pk__in=keep).delete()
+    if highscores.count() > 5:
+        highscores.exclude(pk__in=keep).delete()
 
-        data = serializers.serialize('json', keep)
+    data = serializers.serialize('json', keep)
 
-        return HttpResponse(data)
+    return HttpResponse(data)
 
 
 @ajax_required
 @csrf_exempt
 def save(request, pk):
-        gameState = request.POST.get('save_state')
-        user = request.user
+    gameState = request.POST.get('save_state')
+    user = request.user
 
-        try:
-            obj = Save.objects.filter(game__pk=pk).get(user=user)
-            obj.gameState = gameState
-            obj.save()
-        except Save.DoesNotExist:
-            game = Game.objects.get(pk=pk)
-            obj = Save(game=game, user=user, gameState=gameState)
-            obj.save()
+    try:
+        obj = Save.objects.filter(game__pk=pk).get(user=user)
+        obj.gameState = gameState
+        obj.save()
+    except Save.DoesNotExist:
+        game = Game.objects.get(pk=pk)
+        obj = Save(game=game, user=user, gameState=gameState)
+        obj.save()
 
-        return HttpResponse("OK")
+    return HttpResponse("OK")
 
 
 @ajax_required
 @csrf_exempt
 def load(request, pk):
-        user = request.user
-        obj = Save.objects.filter(game__pk=pk).get(user=user)
-        return HttpResponse(obj.gameState)
+    user = request.user
+    obj = Save.objects.filter(game__pk=pk).get(user=user)
+    return HttpResponse(obj.gameState)
 
 
 @login_required
