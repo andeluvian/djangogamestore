@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.decorators.csrf import csrf_exempt
-from payment.models import Transaction
 from .forms import GameForm
 from .models import Game, Save, Highscore
 from .decorators import ajax_required, game_required
@@ -24,8 +23,7 @@ class GameDetailView(DetailView):
 
 @login_required
 def library(request):
-    user = request.user
-    transactions = Transaction.objects.select_related('game').filter(user=user).filter(state='SUCCESS')
+    transactions = request.user.transaction_set.filter(state='SUCCESS')
     return render(request, 'library.html', {'transactions': transactions})
 
 
