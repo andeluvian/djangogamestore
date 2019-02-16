@@ -92,7 +92,7 @@ def score(request, pk):
     obj = Game.objects.get(pk=pk)
 
     try:
-        highscore = Highscore.objects.get(username=username)
+        highscore = obj.highscores.get(username=username)
         if score > highscore.score:
             highscore.score = score
             highscore.save()
