@@ -92,18 +92,19 @@ def score(request, pk):
     username = request.user.username
     obj = Game.objects.get(pk=pk)
 
-    highscore = Highscore(username=username, score=score)
-    highscore.save()
+    try:
+        highscore = Highscore.objects.get(username=username)
+        if score > highscore.score:
+            highscore.score = score
+            highscore.save()
+    except Highscore.DoesNotExist:
+        highscore = Highscore(username=username, score=score)
+        highscore.save()
+        obj.highscores.add(highscore)
 
-    obj.highscores.add(highscore)
+    highscores = obj.highscores.all().order_by('-score')[:5]
 
-    highscores = obj.highscores.all().order_by('-score')
-    keep = highscores[:5]
-
-    if highscores.count() > 5:
-        highscores.exclude(pk__in=keep).delete()
-
-    data = serializers.serialize('json', keep)
+    data = serializers.serialize('json', highscores)
 
     return HttpResponse(data)
 
