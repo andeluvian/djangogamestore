@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from payment.models import Transaction
 from .forms import GameForm
 from .models import Game, Save, Highscore
-from .decorators import ajax_required
+from .decorators import ajax_required, game_required
 
 
 def index(request):
@@ -86,7 +86,8 @@ class GameEditView(LoginRequiredMixin, UpdateView):
 
 
 @ajax_required
-@csrf_exempt
+@login_required
+@game_required
 def score(request, pk):
     score = int(request.POST.get('score'))
     username = request.user.username
@@ -110,7 +111,8 @@ def score(request, pk):
 
 
 @ajax_required
-@csrf_exempt
+@login_required
+@game_required
 def save(request, pk):
     gameState = request.POST.get('save_state')
     user = request.user
@@ -128,7 +130,8 @@ def save(request, pk):
 
 
 @ajax_required
-@csrf_exempt
+@login_required
+@game_required
 def load(request, pk):
     user = request.user
     obj = Save.objects.filter(game__pk=pk).get(user=user)
@@ -136,6 +139,7 @@ def load(request, pk):
 
 
 @login_required
+@game_required
 def game(request, pk):
     game = Game.objects.get(pk=pk)
     highscores = game.highscores.all().order_by('-score')[:5]
