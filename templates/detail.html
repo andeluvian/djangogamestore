@@ -28,4 +28,18 @@
 
     {% endif %}
 
+    <hr>
+    <div class="contact">
+        <h2>Leaderboard</h2>
+        <ol id="highscores">
+        {% if highscores %}
+            {% for highscore in highscores %}
+                <li>{{ highscore.username }}: {{ highscore.score }}</li>
+            {% endfor %}
+        {% else %}
+        No highscores found.
+        {% endif %}
+        </ol>
+    </div>
+
 {% endblock %}

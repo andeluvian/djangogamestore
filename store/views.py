@@ -20,6 +20,11 @@ class GameDetailView(DetailView):
     model = Game
     template_name = 'detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(GameDetailView, self).get_context_data(**kwargs)
+        context['highscores'] = self.get_object().highscores.all().order_by('-score')[:5]
+        return context
+
 
 @login_required
 def library(request):
