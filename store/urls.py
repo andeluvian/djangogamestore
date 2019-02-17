@@ -16,7 +16,7 @@ urlpatterns = [
     path('game/<int:pk>/play/', views.game, name='game'),
     path('game/<int:pk>/play/save/', views.save, name='save'),
     path('game/<int:pk>/play/load/', views.load, name='load'),
-    path('game/<int:pk>/play/score/', views.score, name='score'),
 
-    path('game/hardcoded/', views.hardcoded, name='hardcoded_game'),
+    path('api/v1/game/<int:pk>/score/', views.api_score, name='api_score'),
+    path('api/v1/game/<int:pk>/score/submit/', views.api_score_submit, name='api_score_submit'),
 ]

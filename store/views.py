@@ -1,7 +1,8 @@
+import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import exceptions, serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
@@ -88,10 +89,22 @@ class GameEditView(LoginRequiredMixin, UpdateView):
         return reverse('game_edit', kwargs={'pk': self.object.id})
 
 
+def api_score(request, pk):
+    obj = Game.objects.get(pk=pk).highscores.all().order_by('-score')
+
+    limit = request.GET.get('limit', '')
+    if limit:
+        obj = obj[:int(limit)]
+
+    obj = obj.values('username', 'score')
+    data = {'highscores': list(obj)}
+    return JsonResponse(data)
+
+
 @ajax_required
 @login_required
 @game_required
-def score(request, pk):
+def api_score_submit(request, pk):
     score = int(request.POST.get('score'))
     username = request.user.username
     obj = Game.objects.get(pk=pk)
@@ -106,11 +119,7 @@ def score(request, pk):
         highscore.save()
         obj.highscores.add(highscore)
 
-    highscores = obj.highscores.all().order_by('-score')[:5]
-
-    data = serializers.serialize('json', highscores)
-
-    return HttpResponse(data)
+    return HttpResponse("OK")
 
 
 @ajax_required
