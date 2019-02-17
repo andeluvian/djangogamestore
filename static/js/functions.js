@@ -1,118 +1,85 @@
-$(document).ready(function()
-{
+$(document).ready( function() {
     'use strict';
-    var frame = document.getElementById('game_iframe');
-    function error(text) {
-      var message =  {
-        messageType: "ERROR",
-        info: text
-      };
-      frame.contentWindow.postMessage(message, "*");
+
+
+    let frame = document.getElementById('game_iframe');
+    function sendError(text) {
+        let message =  {
+            messageType: "ERROR",
+            info: text
+        };
+        frame.contentWindow.postMessage(message, "*");
     }
 
 
-    $(window).on('message', function(evt) {
-
-      var data = evt.originalEvent.data;
-
-
-
-        var Title = $('#gameTitle').html();
-
+    function communicate(url, data, success, error_msg) {
         $.ajax({
-          method: 'POST',
-          url: 'load/',
-          data: { csrfmiddlewaretoken: '{{ csrf_token }}',
-          Title: Title
-        },
-
-        success: function (data) {
-
-             var message = {
-                       messageType: "LOAD",
-                       gameState: data
-                     };
+            method: 'POST',
+            url: url,
+            data: data,
+            success: success,
+            error: function() {
+                sendError(error_msg);
+            }
+        });
+    }
 
 
-              frame.contentWindow.postMessage(message, "*");
-
-           },
-           error: function (data) {
-
-             error("unable to load game ");
-           }
-         });
+    function saveGame() {
+        alert("Game saved!");
+    }
 
 
+    function loadGame(data) {
+        frame.contentWindow.postMessage({ messageType: "LOAD", gameState: JSON.parse(data) }, "*");
+    }
 
 
+    function submitScore(data) {
+        let scores = JSON.parse(data);
+        $("#highscores").empty();
+
+        let fragment = document.createDocumentFragment();
+        for (let i = 0; i < scores.length; i++) {
+            let highscore = scores[i].fields;
+            let div = $('<li>' + highscore.username + ': ' + highscore.score + '</li>')[0];
+            fragment.appendChild(div);
+        }
+
+        $("#highscores").append(fragment);
+    }
 
 
-      }
-
-      if (data.messageType == 'SAVE') {
-          var gamestate = JSON.stringify(data.gameState);
-        var gametitle = $('#gameTitle').html();
-
-
-        $.ajax({
-          method: 'POST',
-          url: 'save/',
-          data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-          save_State: gamestate,
-          Title: gametitle
-        },
-
-        success: function (data) {
-
-             alert("game saved!");
-
-           },
-           error: function (data) {
-
-             error("Unable to save game");
-           }
-         });
-
-      }
-      if (data.messageType == 'SCORE') {
-
-        var score = data.score;
-
-        var title = $('#gameTitle').html();
-
-        $.ajax({
-          method: 'POST',
-          url: 'score/',
-          data: {csrfmiddlewaretoken: '{{ csrf_token }}',
-          Score: score,
-          Title: title
-        },
-        success: function (data) {
-       $(".highscore").load(location.href + " .highscore");
-       },
-      error: function (data) {
-       error("Unable to submit score");
-           }
-         });
-
-      }
-      if (data.messageType == 'LOAD_REQUEST') {
-
-      if (data.messageType == 'SETTING') {
-
-        var width = data.options.width;
-
-        var height = data.options.height;
+    function changeSettings(options) {
+        let width = options.width;
+        let height = options.height;
 
         $('iframe').width(width)
-        .height(height);
-
-      }
-
-
-    });
+            .height(height);
+    }
 
 
+    function parseMessage(event) {
+        let message = event.originalEvent.data;
 
-  });
+        if (message.messageType == 'LOAD_REQUEST') {
+            communicate('load/', { csrfmiddlewaretoken: token }, loadGame, 'Unable to load game' );
+        } 
+        
+        else if (message.messageType == 'SAVE') {
+            let save_state = JSON.stringify(message.gameState);
+            communicate('save/', { csrfmiddlewaretoken: token, save_state: save_state }, saveGame, 'Unable to save game' );
+        } 
+        
+        else if (message.messageType == 'SCORE') {
+            communicate('score/', { csrfmiddlewaretoken: token, score: message.score }, submitScore, 'Unable to submit score' );
+        } 
+        
+        else if (message.messageType == 'SETTING') {
+            changeSettings(message.options);
+        }
+    }
+
+
+    $(window).on('message onmessage', parseMessage);
+});

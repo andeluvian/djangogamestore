@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake</title>
+    <meta charset="UTF-8"/>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready( function() {
+            "use strict";
+
+            const canvas = document.getElementById('game');
+            const context = canvas.getContext('2d');
+            context.font = '18px sans-serif';
+            const tilesize = { x: 50, y: 50 };
+            const map = { x: 10, y: 10 };
+
+            let state = {
+                points: 0,
+                position: { x: 0, y: 4 },
+                direction: { x: 1, y: 0 },
+                food: []
+            };
+
+            let focus = false;
+
+            function score() {
+                let payload = {
+                    'messageType': 'SCORE',
+                    'score': state.points
+                };
+                window.parent.postMessage(payload, '*');
+            }
+
+            function save() {
+                let payload = {
+                    'messageType': 'SAVE',
+                    'gameState': state
+                };
+                window.parent.postMessage(payload, '*');
+            }
+
+            function load() {
+                let payload = {
+                    'messageType': 'LOAD_REQUEST'
+                };
+                window.parent.postMessage(payload, '*');
+            }
+
+            window.addEventListener("message", function(event) {
+                let type = event.data.messageType;
+                if (type === 'LOAD') {
+                    state = event.data.gameState;
+                } else if (type === 'ERROR') {
+                    alert(event.data.info);
+                }
+            });
+
+            function settings() {
+                let payload = {
+                    messageType: 'SETTING',
+                    options: {
+                        'width': 500,
+                        'height': 500
+                    }
+                };
+                window.parent.postMessage(payload, '*');
+            }
+            settings();
+
+            window.onblur = function() { focus = false; }
+            window.onfocus = function() { focus = true; }
+
+            function rng(max) {
+                return Math.floor( Math.random() * max );
+            }
+
+            function reload() {
+                state = {
+                    points: 0,
+                    position: { x: 0, y: 4 },
+                    direction: { x: 1, y: 0 },
+                    food: []
+                };
+            }
+
+            function update() {
+                state.points++;
+
+                state.position.x = state.position.x + state.direction.x;
+                state.position.y = state.position.y + state.direction.y;
+
+                if (state.position.x < 0 ||
+                    state.position.y < 0 ||
+                    state.position.x >= map.x ||
+                    state.position.y >= map.y) {
+                    score();
+                    reload();
+                } 
+            }
+
+            function draw() {
+                frames++;
+                context.fillStyle = '#000';
+                context.fillRect(0, 0, 500, 500);
+                context.fillStyle = '#FFF';
+                context.fillText(state.points, 10, 25);
+
+                let pos = state.position;
+                context.beginPath();
+                context.rect(pos.x * tilesize.x, pos.y * tilesize.y, tilesize.x, tilesize.y);
+                context.fill();
+            }
+
+            $(window).keydown( function(event) {
+                switch (event.which) {
+                    case 37: /* left */
+                        state.direction.x = -1;
+                        state.direction.y = 0;
+                        break;
+                    case 38: /* up */
+                        state.direction.y = -1;
+                        state.direction.x = 0;
+                        break;
+                    case 39: /* right */
+                        state.direction.x = 1;
+                        state.direction.y = 0;
+                        break;
+                    case 40: /* down */
+                        state.direction.y = 1;
+                        state.direction.x = 0;
+                        break;
+                    case 76: /* l-oad */
+                        load();
+                        break;
+                    case 82: /* r-eload */
+                        reload();
+                        draw();
+                        break;
+                    case 83: /* s-ave */
+                        save();
+                        break;
+                }
+            });
+
+            setInterval( function() {
+                if (focus) {
+                    update();
+                    draw();
+                } else {
+                    context.fillStyle = '#000';
+                    context.fillRect(0, 0, 500, 500);
+                    context.fillStyle = '#FFF';
+                    context.fillText('CLICK TO START', 10, 25);
+                    context.fillText('S-AVE, L-OAD, R-ELOAD', 10, 485);
+                }
+            }, 200);
+        });
+    </script>
+</head>
+<body>
+    <canvas id="game" width="500" height="500"></canvas>
+</body>
+</html>

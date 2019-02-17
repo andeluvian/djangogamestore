@@ -13,7 +13,9 @@
 {% for transaction in transactions %}
     {% with game=transaction.game %}
     <div>
-        <a href="{% url 'game_detail' pk=game.pk %}">{{ game.title }}</a>
+        <a href="{% url 'game_detail' pk=game.pk %}" class="h-100">
+            <img class="img-fluid img-thumbnail" src="{{ game.cover_image.url }}" alt="{{ game.title }}">
+        </a>
     </div>
     {% endwith %}
 {% endfor %}

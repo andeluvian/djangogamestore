@@ -17,6 +17,11 @@
     height: auto;
 }
 
+#game_iframe {
+    border: 0;
+    overflow: hidden;
+}
+
 /*
 Overrides pagination colors to match outline-light color scheme
 */

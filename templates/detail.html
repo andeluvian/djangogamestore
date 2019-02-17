@@ -12,7 +12,7 @@
 
         {% if user|has_game:object %}
 
-            <a href="#" class="btn btn-light">Play</a>
+            <a href="{% url 'game' object.pk %}" class="btn btn-light">Play</a>
 
         {% else %}
 
@@ -27,5 +27,19 @@
         <a href="{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
 
     {% endif %}
+
+    <hr>
+    <div class="contact">
+        <h2>Leaderboard</h2>
+        <ol id="highscores">
+        {% if highscores %}
+            {% for highscore in highscores %}
+                <li>{{ highscore.username }}: {{ highscore.score }}</li>
+            {% endfor %}
+        {% else %}
+        No highscores found.
+        {% endif %}
+        </ol>
+    </div>
 
 {% endblock %}
