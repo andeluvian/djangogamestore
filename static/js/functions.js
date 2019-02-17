@@ -35,18 +35,29 @@ $(document).ready( function() {
     }
 
 
-    function submitScore(data) {
-        let scores = JSON.parse(data);
-        $("#highscores").empty();
+    function updateScore() {
+        $.ajax({
+            method: 'GET',
+            url: '/api/v1/game/' + gameId + '/score/?limit=5',
+            data: { csrfmiddlewaretoken: token },
+            success: function(data) {
+                let scores = data.highscores;
+                $("#highscores").empty();
 
-        let fragment = document.createDocumentFragment();
-        for (let i = 0; i < scores.length; i++) {
-            let highscore = scores[i].fields;
-            let div = $('<li>' + highscore.username + ': ' + highscore.score + '</li>')[0];
-            fragment.appendChild(div);
-        }
+                let fragment = document.createDocumentFragment();
+                for (let i = 0; i < scores.length; i++) {
+                    let highscore = scores[i];
+                    let div = $('<li>' + highscore.username + ': ' + highscore.score + '</li>')[0];
+                    fragment.appendChild(div);
+                }
 
-        $("#highscores").append(fragment);
+                $("#highscores").append(fragment);
+            },
+            error: function(data) {
+                console.log('Leaderboard update failed');
+            }
+        });
+
     }
 
 
@@ -72,7 +83,7 @@ $(document).ready( function() {
         } 
         
         else if (message.messageType == 'SCORE') {
-            communicate('score/', { csrfmiddlewaretoken: token, score: message.score }, submitScore, 'Unable to submit score' );
+            communicate('/api/v1/game/' + gameId + '/score/submit/', { csrfmiddlewaretoken: token, score: message.score }, updateScore, 'Unable to submit score' );
         } 
         
         else if (message.messageType == 'SETTING') {
