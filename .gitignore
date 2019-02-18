@@ -12,3 +12,4 @@ database_erd.xml
 .gitignore
 db.sqlite3
 .DS_Store
+uploads/

@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath gamestore gamestore.deploy --log-file -
