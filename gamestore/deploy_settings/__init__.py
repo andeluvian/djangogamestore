@@ -4,7 +4,7 @@ import dj_database_url
 
 from gamestore.settings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = [
