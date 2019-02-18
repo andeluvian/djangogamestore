@@ -11,7 +11,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '.herokuapp.com',
 ]
-INSTALLED_APPS += ('storages',)
+
 
 SECRET_KEY = get_env_variable("SECRET_KEY")
 
@@ -25,6 +25,7 @@ SECURE_SSL_REDIRECT = False
 SITE_ID = 2
 
 # AWS S3 Settings
+INSTALLED_APPS += ('storages',)
 AWS_QUERYSTRING_AUTH = False
 AWS_ACCESS_KEY_ID = get_env_variable("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = get_env_variable("AWS_SECRET_ACCESS_KEY")
