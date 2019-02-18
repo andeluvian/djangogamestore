@@ -19,4 +19,4 @@ DATABASES['default'].update(db_from_env)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
