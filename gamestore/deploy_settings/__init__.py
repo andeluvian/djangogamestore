@@ -1,3 +1,7 @@
+# source: https://teamtreehouse.com/library/making-our-project-productionready
+
+import dj_database_url
+
 from gamestore.settings import *
 
 DEBUG = False
@@ -8,4 +12,7 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
 ]
 
-# source: https://teamtreehouse.com/library/making-our-project-productionready
+SECRET_KEY = get_env_variable("SECRET_KEY")
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
