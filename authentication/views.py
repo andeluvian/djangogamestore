@@ -38,7 +38,7 @@ def register_view(request):
         user.save()
         current_site = get_current_site(request)
         subject = 'Activate Your JavaScript GameStore Account'
-        message = render_to_string('account_activation_email.html', {
+        message = render_to_string('authentication/account_activation_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
@@ -57,11 +57,11 @@ def register_view(request):
     context = {
         'form': form
     }
-    return render(request, "register.html", context)
+    return render(request, "registration/register.html", context)
 
 
 def account_activation_sent(request):
-    return render(request, 'account_activation_sent.html', {'context': 'context'})
+    return render(request, 'authentication/account_activation_sent.html', {'context': 'context'})
 
 
 def activate(request, uidb64, token):
@@ -78,7 +78,7 @@ def activate(request, uidb64, token):
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('index')
     else:
-        return render(request, 'account_activation_invalid.html')
+        return render(request, 'authentication/account_activation_invalid.html')
 
 
 # Email activate feature
