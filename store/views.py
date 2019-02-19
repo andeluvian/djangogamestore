@@ -19,7 +19,7 @@ def index(request):
 
 class GameDetailView(DetailView):
     model = Game
-    template_name = 'detail.html'
+    template_name = 'store/game_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(GameDetailView, self).get_context_data(**kwargs)
@@ -30,13 +30,13 @@ class GameDetailView(DetailView):
 @login_required
 def library(request):
     transactions = request.user.transaction_set.filter(state='SUCCESS')
-    return render(request, 'library.html', {'transactions': transactions})
+    return render(request, 'store/game_library.html', {'transactions': transactions})
 
 
 @login_required
 def user_profile(request):
     games = Game.objects.all()
-    return render(request, 'user_profile.html', {'games': games})
+    return render(request, 'store/profile_user.html', {'games': games})
 
 
 @login_required
@@ -45,7 +45,7 @@ def developer_profile_page(request):
     game = Game.objects.filter(game_owner_id=current_user.id)
     context = {'games': game,
                'user': current_user}
-    return render(request, 'dev_profile.html', context)
+    return render(request, 'store/profile_dev.html', context)
 
 
 @login_required
@@ -58,25 +58,17 @@ def add_game(request):
             game.save()
             return redirect('dev_profile')
         else:
-            return render(request, 'add_game.html', {'form': form})
+            return render(request, 'store/game_add.html', {'form': form})
     else:
         form = GameForm()
         context = {'form': form}
-        return render(request, 'add_game.html', context)
-
-
-def login(request):
-    return render(request, 'login.html', {'context': 'context'})
-
-
-def register(request):
-    return render(request, 'register.html', {'context': 'context'})
+        return render(request, 'store/game_add.html', context)
 
 
 class GameEditView(LoginRequiredMixin, UpdateView):
     model = Game
     fields = ['title', 'game_file', 'cover_image', 'price']
-    template_name = 'game_update.html'
+    template_name = 'store/game_update.html'
 
     # Verify that only owner of the game can update it
     def get_object(self, *args, **kwargs):
@@ -156,8 +148,8 @@ def game(request, pk):
     game = Game.objects.get(pk=pk)
     highscores = game.highscores.all().order_by('-score')[:5]
     args = {'user': request.user, 'game': game, 'highscores': highscores}
-    return render(request, "play.html", args)
+    return render(request, "store/game_play.html", args)
 
 
 def hardcoded(request):
-    return render(request, "hardcoded_game.html")
+    return render(request, "store/game_hardcoded.html")

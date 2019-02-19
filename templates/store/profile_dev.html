@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Developer Profile{% endblock %}
+{% block main-content %}
+<div class="row">
+    <div class="col">
+        <h2 class="my-3">Developer</h2>
+        <div class="table-responsive border rounded my-3">
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th class="border-0" scope="col">Game</th>
+                        <th class="border-0" scope="col">Sales</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+
+                {% if games %}
+                {% for game in games %}
+                    <tr>
+                        <td class="w-10"><a href="{% url 'game_edit' pk=game.pk %}" class="text-light">{{ game.title }}</a></td>
+                        <td><a href="{% url 'payment_sales' pk=game.pk %}" class="text-light">Details</a></td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="2">No games found.</td></tr>
+                {% endif %}
+
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'add_game' %}" class="btn btn-light">Add game</a>
+    </div>
+</div>
+{% endblock %}

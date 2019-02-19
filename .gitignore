@@ -13,3 +13,4 @@ database_erd.xml
 db.sqlite3
 .DS_Store
 uploads/
+.sass-cache

@@ -2,7 +2,7 @@ $(document).ready( function() {
     'use strict';
 
 
-    let frame = document.getElementById('game_iframe');
+    let frame = document.getElementById('game-container');
     function sendError(text) {
         let message =  {
             messageType: "ERROR",

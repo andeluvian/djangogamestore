@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block title %}Library{% endblock %}
+
+{% block main-content %}
+
+<div class="row mt-3">
+    <div class="col">
+        <h2>Library</h2>
+    </div>
+</div>
+<div class="row p-2">
+        {% if transactions %}
+        {% for transaction in transactions %}
+            {% with game=transaction.game %}
+                <div class="col-sm-6 col-lg-4 p-2">
+                    <div class="card bg-dark border-secondary">
+                        <a href="{% url 'game_detail' pk=game.pk %}">
+                            <img src="{{ game.cover_image.url }}" class="card-img-top" alt="{{ game.title }}">
+                        </a>
+                        <div class="card-body p-2">
+                            <div class="row no-gutters">
+                                <div class="col">
+                                    <p class="card-text p-2">{{ game.title }}</p>
+                                </div>
+                                <div class="col text-right">
+                                    <a href="{% url 'game' game.pk %}" class="btn btn-outline-light">Play</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+        {% else %}
+        <div class="col p-2">
+            No games found. Buy games from the <a href="{% url 'index' %}">store</a>.
+        </div>
+        {% endif %}
+</div>
+
+{% endblock %}

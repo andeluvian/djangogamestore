@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block title %}Hardcoded iframe{% endblock %}
+
+{% block main-content %}
+
+<iframe id="game-container" width="800" height="800" src="http://webcourse.cs.hut.fi/example_game.html"></iframe>
+
+<script src="{% static 'js/messaging.js' %}"></script>
+
+{% endblock %}

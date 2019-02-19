@@ -6,7 +6,7 @@
 {% block main-content %}
     <div class="row">
         <div class="col-sm-8 col-md-6 col-lg-5 border rounded mx-auto mt-5">
-            <h3 class="my-3">Register</h3>
+            <h2 class="my-3">Register</h2>
             <form method="post">
                 {% csrf_token %}
                 <!-- Adopted from: https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html-->
@@ -28,8 +28,8 @@
                 </ul>
 
                 <div class="form-group">
-                    <button type="submit" name="button" class="btn btn-primary">Sign-up</button>
-                    <a href="{% url 'index' %}" class="btn btn-default role=" button">Cancel</a>
+                    <button type="submit" name="button" class="btn btn-light">Sign-up</button>
+                    <a href="{% url 'index' %}" class="btn btn-default text-light" role="button">Cancel</a>
                     <p class="mt-2"><a href="{% url 'login' %}" class="text-muted">Do you have an account?</a></p>
                 </div>
             </form>
