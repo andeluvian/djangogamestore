@@ -20,8 +20,6 @@
         <input type="hidden" name="error_url" value="http://{{ request.get_host }}{% url 'payment_verification' %}" />
         <input type="hidden" name="checksum" value="{{ checksum }}" />
 
-        <input type="hidden" name="dev" value="on" />
-
         <div class="table-responsive border rounded">
             <table class="table m-0">
                 <tbody>
