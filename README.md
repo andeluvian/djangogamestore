@@ -148,3 +148,16 @@ Before merging components into master branch, components are tested and approved
 * URLs are placed in gamestore.urls
 * All templates are in the templates directory and inherit layout.html (which contains the bootstrap container).
 * Install django-widget-tweaks for the forms to render correctly with bootstrap classes (pip install django-widget-tweaks).
+
+
+## 8. How to access
+
+The gamestore site is built according to the specifications given by course staff. Players can play the games after they have purchased the games. Developers can upload games for sale.
+Each user will track which games have been purchased / sold and games will keep track of saved games and game data. To access the site use the following link and credentials
+
+* https://js-gamestore.herokuapp.com/
+* useraccount test123 / QWERTY123 is a player to test the game features
+
+All users can become developers and upload games, to access this functionality click on the profile page -> developer upload and follow the form provided.
+(Current datamodel is not using a URL, instead it requires the Upload of a HTML file and cover art to the game which is stored on AWS S3 bucket.implementation of game url was done in a earlier version of the project [link to commit](https://version.aalto.fi/gitlab/forsmak1/djangogamestore/blob/game-service/store/models.py)
+
