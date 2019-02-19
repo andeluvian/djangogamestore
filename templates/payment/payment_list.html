@@ -29,7 +29,7 @@
                 <td>{{ transaction.pid }}</td>
                 <td>{{ transaction.amount|price }}</td>
                 <td>{{ transaction.state }}</td>
-                <td><a href="{% url 'payment_detail' uuid=transaction.pid %}">Details</a></td>
+                <td><a href="{% url 'payment_detail' uuid=transaction.pid %}" class="text-light">Details</a></td>
             </tr>
         {% endfor %}
 

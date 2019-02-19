@@ -1,16 +1,34 @@
 {% extends 'layout.html' %}
+{% load payment_extras %}
 
 {% block title %}Home{% endblock %}
 
 {% block main-content %}
-    <div class="row text-center">
-    {% for game in games %}
-        <div class="col-lg-3 col-md-4 col-xs-6">
-            <a href="{% url 'game_detail' pk=game.pk %}" class="d-block mb-4 h-100">
-                <img class="img-fluid img-thumbnail" src="{{ game.cover_image.url }}"
-                     alt="{{ game.title }}">
-            </a>
+    <div class="row p-2">
+        {% for game in games %}
+        <div class="col-sm-6 col-lg-4 p-2">
+            <div class="card bg-dark border-secondary">
+                <a href="{% url 'game_detail' pk=game.pk %}">
+                    <img src="{{ game.cover_image.url }}" class="card-img-top" alt="{{ game.title }}">
+                </a>
+                <div class="card-body p-2">
+                    <div class="row no-gutters">
+                        <div class="col">
+                            <p class="card-text p-2">{{ game.title }}</p>
+                        </div>
+                        {% if user.is_authenticated and user|has_game:game %}
+                        <div class="col text-right">
+                            <a href="{% url 'game' game.pk %}" class="btn btn-outline-light">Play</a>
+                        </div>
+                        {% else %}
+                        <div class="col text-right">
+                            <a href="{% url 'payment_checkout' pk=game.pk %}" class="btn btn-outline-success">{{ game.price|price }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 {% endblock %}

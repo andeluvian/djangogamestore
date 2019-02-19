@@ -5,41 +5,36 @@
 
 {% block main-content %}
 
-    <h1>{{ object.title }}</h1>
-    <img src="{{ object.cover_image.url }}" alt="{{ object.title }}" style="max-width: 100%">
+<div class="row">
+    <div class="col p-3">
+        <h2 class="mb-3">{{ object.title }}</h2>
 
-    {% if user.is_authenticated %}
+        <div class="card bg-dark border-secondary" style="max-width: 500px;">
+            <img src="{{ object.cover_image.url }}" class="card-img-top" alt="{{ object.title }}">
+        </div>
 
-        {% if user|has_game:object %}
+        <div class="my-3">
+            {% if user.is_authenticated and user|has_game:object %}
+                <a href="{% url 'game' object.pk %}" class="btn btn-outline-light">Play</a>
+            {% else %}
+                <a href="{% url 'payment_checkout' pk=object.pk %}" class="btn btn-outline-success">{{ object.price|price }}</a>
+            {% endif %}
+        </div>
 
-            <a href="{% url 'game' object.pk %}" class="btn btn-light">Play</a>
-
-        {% else %}
-
-            <p>Price: {{ object.price|price }}</p>
-            <a href="{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
-
-        {% endif %}
-
-    {% else %}
-
-        <p>Price: {{ object.price|price }}</p>
-        <a href="{% url 'payment_checkout' pk=object.pk %}" class="btn btn-light">Buy</a>
-
-    {% endif %}
-
-    <hr>
-    <div class="contact">
-        <h2>Leaderboard</h2>
-        <ol id="highscores">
-        {% if highscores %}
-            {% for highscore in highscores %}
-                <li>{{ highscore.username }}: {{ highscore.score }}</li>
-            {% endfor %}
-        {% else %}
-        No highscores found.
-        {% endif %}
-        </ol>
+        <div class="contact">
+            <h3 class="my-3">Leaderboard</h3>
+            <ol id="highscores">
+            {% if highscores %}
+                {% for highscore in highscores %}
+                    <li>{{ highscore.username }}: {{ highscore.score }}</li>
+                {% endfor %}
+            {% else %}
+            No highscores found.
+            {% endif %}
+            </ol>
+        </div>
     </div>
+</div>
+
 
 {% endblock %}

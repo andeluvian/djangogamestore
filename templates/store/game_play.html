@@ -5,32 +5,28 @@
 
 {% block main-content %}
 
-<section id="section1">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="panel-body">
-                <h3 class="panel-title" id="gameTitle">{{ game.title }}</h3>
-                <hr>
-                <div id="Game" style="text-align: center;">
-                    <iframe id="game_iframe" name="game_iframe" width="500" height="500" class="embed-responsive-item" src="{{ game.game_file.url }}"></iframe>
-                </div>
-                <hr>
-                <div class="contact">
-                    <h2>Leaderboard</h2>
-                    <ol id="highscores">
-                    {% if highscores %}
-                        {% for highscore in highscores %}
-                            <li>{{ highscore.username }}: {{ highscore.score }}</li>
-                        {% endfor %}
-                    {% else %}
-                    No highscores found.
-                    {% endif %}
-                    </ol>
-                </div>
+<div class="row">
+    <div class="col">
+        <div class="panel-body">
+            <h2 class="my-3">{{ game.title }}</h2>
+            <div style="text-align: center;">
+                <iframe id="game-container" width="500" height="500" class="embed-responsive-item" src="{{ game.game_file.url }}"></iframe>
+            </div>
+            <div class="contact">
+                <h3 class="my-3">Leaderboard</h3>
+                <ol id="highscores">
+                {% if highscores %}
+                    {% for highscore in highscores %}
+                        <li>{{ highscore.username }}: {{ highscore.score }}</li>
+                    {% endfor %}
+                {% else %}
+                No highscores found.
+                {% endif %}
+                </ol>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 <script>
     let token = '{{ csrf_token }}';

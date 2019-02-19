@@ -4,25 +4,29 @@
 
 {% block main-content %}
 
-<div class="my-3">
-    <h2>Profile</h2>
-</div>
+<div class="row">
+    <div class="col">
+        <div class="my-3">
+            <h2>Profile</h2>
+        </div>
 
-<div class="my-3">
-    <ul class="list-unstyled">
-        <li class="my-3">
-            <div class="border-bottom"><h4><a href="{% url 'library' %}">Library</a></h4></div>
-            <div>Browse game library.</div>
-        </li>
-        <li class="my-3">
-            <div class="border-bottom"><h4><a href="{% url 'payment_list' %}">Purchase history</a></h4></div>
-            <div>Show purchases.</div>
-        </li>
-        <li class="my-3">
-            <div class="border-bottom"><h4><a href="{% url 'dev_profile' %}">Developer</a></h4></div>
-            <div>Upload games as developer and track sales.</div>
-        </li>
-    </ul>
+        <div class="my-3">
+            <ul class="list-unstyled">
+                <li class="my-3">
+                    <div class="border-bottom border-secondary"><h4><a href="{% url 'library' %}" class="text-light">Library</a></h4></div>
+                    <div class="my-1">Browse game library.</div>
+                </li>
+                <li class="my-3">
+                    <div class="border-bottom border-secondary"><h4><a href="{% url 'payment_list' %}" class="text-light">Purchase history</a></h4></div>
+                    <div class="my-1">Show purchases.</div>
+                </li>
+                <li class="my-3">
+                    <div class="border-bottom border-secondary"><h4><a href="{% url 'dev_profile' %}" class="text-light">Developer</a></h4></div>
+                    <div class="my-1">Upload games as developer and track sales.</div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

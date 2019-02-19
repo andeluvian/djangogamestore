@@ -3,12 +3,30 @@
 
 {% block title %}Developer Profile{% endblock %}
 {% block main-content %}
-    <h1>Dev Profile Page for {{ user }}</h1>
-    <p>Your games:</p>
-    <ul>
-    {% for game in games %}
-        <li><a href="{% url 'game_edit' pk=game.pk %}">{{ game.title }}</a> - <a href="{% url 'payment_sales' pk=game.pk %}">Sales</a></li>
-    {%  endfor %}
-    </ul>
-    <a href="{% url 'add_game' %}">Add new game</a>
+<div class="row">
+    <div class="col">
+        <h1 class="my-3">Developer</h1>
+        <div class="table-responsive border rounded my-3">
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th class="border-0" scope="col">Game</th>
+                        <th class="border-0" scope="col">Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                {% for game in games %}
+                    <tr>
+                        <td class="w-10"><a href="{% url 'game_edit' pk=game.pk %}" class="text-light">{{ game.title }}</a></td>
+                        <td><a href="{% url 'payment_sales' pk=game.pk %}" class="text-light">Details</a></td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'add_game' %}" class="btn btn-light">Add game</a>
+    </div>
+</div>
 {% endblock %}

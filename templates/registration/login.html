@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-sm-8 col-md-6 col-lg-5 border rounded mx-auto mt-5">
             <h3 class="my-3">Login</h3>
-            <p><a href="{% provider_login_url 'github' %}">Login with Github</a></p>
+            <p><a href="{% provider_login_url 'github' %}" class="text-muted">Login with Github</a></p>
             <form method="post">
                 {% csrf_token %}
                 <!-- django tweaks code reference: https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html-->
@@ -35,7 +35,7 @@
                 </ul>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-light">Login</button>
                     <p class="mt-3"><a href="{% url 'password_reset' %}" class="text-muted">Reset password</a></p>
                 </div>
             </form>

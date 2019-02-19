@@ -1,0 +1,30 @@
+/*
+Overrides pagination colors to match outline-light color scheme
+*/
+.pg-outline-light > .page-item > .page-link {
+  color: #f8f9fa;
+  background-color: transparent;
+  background-image: none;
+  :
+    border-color: #f8f9fa; }
+
+.pg-outline-light > .page-item.active > .page-link,
+.pg-outline-light > .page-item:hover > .page-link {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa; }
+
+.nav-link {
+  color: white !important; }
+  .nav-link:hover {
+    text-decoration: underline; }
+
+#logo {
+  width: 225px;
+  height: auto; }
+
+#game-container {
+  border: 0;
+  overflow: hidden; }
+
+/*# sourceMappingURL=main.css.map */
