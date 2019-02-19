@@ -156,3 +156,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+
+seller_id = 'SmallGameStore'
+seller_key = '19467677922774a4b3de618c3f86177f'

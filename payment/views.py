@@ -1,21 +1,17 @@
-import uuid
-import urllib.request
 import urllib.parse
+import urllib.request
+import uuid
+from hashlib import md5
+
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from hashlib import md5
-from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+
+from gamestore.settings import seller_id, seller_key
 from payment.models import Transaction
 from store.models import Game
-
-
-# TODO: create new id and key before final push to production
-# TODO: replace with environmental variables
-seller_id = 'SmallGameStore'
-seller_key = '19467677922774a4b3de618c3f86177f'
 
 
 def generate_checksum(list):
@@ -50,7 +46,8 @@ def checkout_view(request, pk):
         obj = Transaction(pid=pid, amount=amount, user=user, game=game)
         obj.save()
 
-    context = {'pid': pid,'sid': seller_id,'amount': amount,'checksum': checksum, 'username': username, 'game': game.title }
+    context = {'pid': pid, 'sid': seller_id, 'amount': amount, 'checksum': checksum, 'username': username,
+               'game': game.title}
 
     return render(request, 'payment/payment_checkout.html', context)
 
@@ -85,7 +82,7 @@ def detail_view(request, uuid):
     transaction = Transaction.objects.get(pid=uuid)
 
     if transaction.user == user:
-        return render(request, 'payment/payment_detail.html', { 'transaction': transaction })
+        return render(request, 'payment/payment_detail.html', {'transaction': transaction})
     return redirect('payment_list')
 
 
@@ -99,8 +96,8 @@ def list_view(request):
 
     page = request.GET.get('page', 1)
     transactions = paginator.get_page(page)
-    
-    return render(request, 'payment/payment_list.html', { 'transactions': transactions })
+
+    return render(request, 'payment/payment_list.html', {'transactions': transactions})
 
 
 @login_required
@@ -118,10 +115,10 @@ def sales_view(request, pk):
 
         total = list(transaction_list.aggregate(total_price=Sum('amount')).values())[0]
 
-        return render(request, 'payment/payment_sales.html', { 'game': game, 'transactions': transactions, 'total': total })
+        return render(request, 'payment/payment_sales.html',
+                      {'game': game, 'transactions': transactions, 'total': total})
     else:
         return redirect('index')
-
 
 # Pagination
 # https://docs.djangoproject.com/en/2.1/topics/pagination/
