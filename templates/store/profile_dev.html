@@ -14,14 +14,19 @@
                         <th class="border-0" scope="col">Sales</th>
                     </tr>
                 </thead>
+                
                 <tbody>
-                    
+
+                {% if games %}
                 {% for game in games %}
                     <tr>
                         <td class="w-10"><a href="{% url 'game_edit' pk=game.pk %}" class="text-light">{{ game.title }}</a></td>
                         <td><a href="{% url 'payment_sales' pk=game.pk %}" class="text-light">Details</a></td>
                     </tr>
                 {% endfor %}
+                {% else %}
+                <tr><td colspan="2">No games found.</td></tr>
+                {% endif %}
 
                 </tbody>
             </table>

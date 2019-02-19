@@ -33,7 +33,9 @@
             {% endwith %}
         {% endfor %}
         {% else %}
+        <div class="col p-2">
             No games found. Buy games from the <a href="{% url 'index' %}">store</a>.
+        </div>
         {% endif %}
 </div>
 

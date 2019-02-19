@@ -23,6 +23,7 @@
         </thead>
         <tbody>
             
+        {% if transactions %}
         {% for transaction in transactions %}
             <tr>
                 <td>{{ transaction.updated|date:'Y-m-d H:i:s' }}</td>
@@ -32,6 +33,9 @@
                 <td><a href="{% url 'payment_detail' uuid=transaction.pid %}" class="text-light">Details</a></td>
             </tr>
         {% endfor %}
+        {% else %}
+        <tr><td colspan="5">No transactions.</td></tr>
+        {% endif %}
 
         </tbody>
     </table>

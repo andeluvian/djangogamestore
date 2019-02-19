@@ -5,6 +5,7 @@
 
 {% block main-content %}
     <div class="row p-2">
+        {% if games %}
         {% for game in games %}
         <div class="col-sm-6 col-lg-4 p-2">
             <div class="card bg-dark border-secondary">
@@ -30,5 +31,8 @@
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        No games found.
+        {% endif %}
     </div>
 {% endblock %}

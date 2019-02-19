@@ -38,6 +38,7 @@
         </thead>
         <tbody>
             
+        {% if transactions %}
         {% for transaction in transactions %}
             <tr>
                 <td>{{ transaction.updated|date:'Y-m-d H:i:s' }}</td>
@@ -45,6 +46,9 @@
                 <td>{{ transaction.amount|price }}</td>
             </tr>
         {% endfor %}
+        {% else %}
+        <tr><td colspan="3">No transactions.</td></tr>
+        {% endif %}
 
         </tbody>
     </table>
