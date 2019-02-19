@@ -1,8 +1,10 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Edit{% endblock %}
 
 {% block main-content %}
+
+    <h2 class="my-3">Edit Game</h2>
 
     <form method="POST" enctype="multipart/form-data">{% csrf_token %}
         {{ form.as_p }}
